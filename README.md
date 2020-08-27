@@ -1,0 +1,2 @@
+# Schoolscript
+School management System
