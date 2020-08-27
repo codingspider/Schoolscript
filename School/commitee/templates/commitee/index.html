@@ -1,0 +1,33 @@
+{% extends 'institute/base.html' %}
+{% block content %}
+<table class="table">
+  <h2>Add Committee</h2> <a href="/add_committee" class="btn btn-info pull-right">Add Committee</a>
+  <thead>
+    <tr>
+      <th scope="col">Serial</th>
+      <th scope="col">Name</th>
+      <th scope="col">Designation</th>
+      <th scope="col">Joining Date</th>
+      <th scope="col">Blood Group</th>
+      <th scope="col">Action</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for committee in committees %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ committee.full_name }}</td>
+      <td>{{ committee.designation }}</td>
+      <td>{{ committee.joining_date }}</td>
+      <td>{{ committee.blood_group }}</td>
+        <td>
+            <a href="/committee_detail/{{ committee.id }}" class="btn btn-info">View</a>
+            <a href="/edit_committee/{{ committee.id }}" class="btn btn-warning">Edit</a>
+            <a href="/delete_committee/{{ committee.id }}"  onclick="return confirm('Are you sure you want to delete this?')"  class="btn btn-danger">Delete</a>
+        </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

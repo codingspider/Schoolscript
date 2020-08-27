@@ -1,0 +1,32 @@
+{% extends 'institute/base.html' %}
+
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Father name </th>
+      <th>Father Occupation </th>
+      <th>Father Monthly Income </th>
+      <th>Qualification</th>
+       <th>Phone </th>
+        <th>Email </th>
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for value in parent %}
+    <tr>
+      <td>{{ value.father_name}}</td>
+      <td>{{ value.father_occupation}}</td>
+      <td>{{ value.father_monthly_income}}</td>
+      <td>{{ value.educational_qualification}}</td>
+      <td>{{ value.father_phone}}</td>
+      <td>{{ value.father_email }}</td>
+
+
+    </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+{% endblock %}

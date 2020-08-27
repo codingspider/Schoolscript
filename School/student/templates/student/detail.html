@@ -1,0 +1,27 @@
+
+{% extends 'institute/base.html' %}
+{% block content %}
+<table class="table">
+  <thead class="thead-info">
+    <tr>
+       <th scope="col">Name</th>
+      <th scope="col">Institute Name </th>
+      <th scope="col">Student Class </th>
+      <th scope="col">Section</th>
+      <th scope="col">Class Roll </th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for instance in students %}
+    <tr>
+      <th>{{ instance.student_name }}</th>
+      <td>{{ instance.institute_name }}</td>
+      <td>{{ instance.student_class }}</td>
+      <td>{{ instance.section }}</td>
+      <td>{{ instance.class_roll }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+</table>
+{% endblock %}

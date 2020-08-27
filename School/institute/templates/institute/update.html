@@ -1,0 +1,269 @@
+{% extends 'institute/base.html' %}
+
+{% block content %}
+<div class="alert alert-danger print-error-msg" style="display:none">
+    <ul></ul>
+</div>
+
+<div class="fw fl mt40">
+    <form method="post" id="friend-form" class="group_form" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="institute_id" id="institute_id" value="{{ object.id }}">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.name.label_tag }}</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ object.name }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.email_1.label_tag }}</label>
+                    <input type="email" class="form-control" id="email_1" name="email_1" value="{{ object.email_1 }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.email_2.label_tag }}</label>
+                    <input type="text" class="form-control" id="email_2" name="email_2" value="{{ object.email_2 }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.website.label_tag }}</label>
+                    <input type="text" class="form-control" id="website" name="website" value="{{ object.website }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.institute_code.label_tag }}</label>
+                    <input type="text" class="form-control" id="institute_code" name="institute_code"
+                           value="{{ object.institute_code }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.address_1.label_tag }}</label>
+                    <input type="text" class="form-control" id="address_1" name="address_1"
+                           value="{{ object.address_1 }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.address_2.label_tag }}</label>
+                    <input type="text" class="form-control" id="address_2" name="address_2"
+                           value="{{ object.address_2 }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.country.label_tag }}</label>
+                    <input type="text" class="form-control" id="country" name="country" value="{{ object.country }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.state.label_tag }}</label>
+                    <input type="text" class="form-control" id="state" name="state" value="{{ object.state }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.city.label_tag }}</label>
+                    <input type="text" class="form-control" id="city" name="city" value="{{ object.city }}">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.zip.label_tag }}</label>
+                    <input type="text" class="form-control" id="zip" name="zip" value="{{ object.zip }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.latitude.label_tag }}</label>
+                    <input type="text" class="form-control" id="latitude" name="latitude" value="{{ object.latitude }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.longitude.label_tag }}</label>
+                    <input type="text" class="form-control" id="longitude" name="longitude"
+                           value="{{ object.longitude }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.established_date.label_tag }}</label>
+                    <input type="text" class="form-control" id="established_date" name="established_date"
+                           value="{{ object.established_date }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.phone_1.label_tag }}</label>
+                    <input type="text" class="form-control" id="phone_1" name="phone_1" value="{{ object.phone_1 }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.phone_2.label_tag }}</label>
+                    <input type="text" class="form-control" id="phone_2" name="phone_2" value="{{ object.phone_2 }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.fax.label_tag }}</label>
+                    <input type="text" class="form-control" id="fax" name="fax" value="{{ object.fax }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.agree.label_tag }}</label>
+                    <input type="checkbox" class="form-control" id="agree" name="agree" value="{{ object.agree }}">
+                </div>
+            </div>
+
+        </div>
+        <br>
+
+        <input type="submit" class="btn btn-success" value="Save">
+
+    </form>
+
+    <div class="container">
+        <form action="" method="post" id="rati" enctype="multipart/form-data">
+             {% csrf_token %}
+        <input type="hidden" name="institute_id" id="institute_id" value="{{ object.id }}">
+           <div class="row">
+             <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.institute_logo.label_tag }}</label>
+                    <input type="file" class="form-control" id="institute_logo" onchange="upload_img(this)" name="institute_logo" value="{{ object.institute_logo }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">{{ form.principle_signature.label_tag }}</label>
+                    <input type="file" class="form-control" onchange="prin_sig(this)" id="principle_signature" name="principle_signature" value="{{ object.principle_signature }}">
+                </div>
+            </div>
+             <div class="col-md-4">
+                <img id="img_id" style="width:100px; height:100px; " src="" alt="your image"/>
+            </div>
+            <div class="col-md-4">
+                <img id="principle_img_id" style="width:100px; height:100px; " src="" alt="your image"/>
+            </div>
+               <div class="col-md-4">
+                   <input type="submit" class="btn btn-success" value="Save">
+               </div>
+        </div>
+        </form>
+
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+        function upload_img(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#img_id').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+</script>
+<script type="text/javascript">
+        function prin_sig(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#principle_img_id').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+</script>
+<script type="text/javascript">
+    $('#friend-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/edit_institute/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                    alert('updated successfully')
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+           function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                $(".print-error-msg").find("ul").append('<li>'+key+' - '+value+'</li>');
+                return false;
+              }
+            });
+        }
+
+    });
+    // end
+
+
+
+</script>
+<script type="text/javascript">
+    $('#rati').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/edit_institute_image/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                    alert('Image Updated')
+                    }else{
+                       alert('Image Updated Faild..........!')
+
+                    }
+             },
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+
+    });
+    // end
+
+
+
+</script>
+
+
+{% endblock %}

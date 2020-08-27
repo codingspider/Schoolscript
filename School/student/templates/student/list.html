@@ -1,0 +1,40 @@
+
+{% extends 'institute/base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <a href="{% url 'add_student' %}" class="btn btn-success">Add New Student</a>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Institute Name </th>
+      <th scope="col">Student Class </th>
+      <th scope="col">Section</th>
+      <th scope="col">Class Roll </th>
+      <th scope="col">Action </th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for instance in students %}
+    <tr>
+      <th>{{ instance.student_name }}</th>
+      <td>{{ instance.institute_name }}</td>
+      <td>{{ instance.student_class }}</td>
+      <td>{{ instance.section }}</td>
+      <td>{{ instance.class_roll }}</td>
+         <td>
+              <a href="/student_details/{{ instance.id }}" class="btn btn-success">Details</a>
+              <a href="/edit_student/{{ instance.id }}" type="button" class="btn btn-primary">Edit</a>
+              <a href="/delete_student/{{ instance.id }}" onclick="return confirm('Are you sure you want to delete this?')" type="button" class="btn btn-danger">Delete </a>
+         </td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+
+
+{% endblock %}

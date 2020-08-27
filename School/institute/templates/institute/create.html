@@ -1,0 +1,148 @@
+{% extends 'institute/base.html' %}
+
+{% block content %}
+
+  <!-- custom  -->
+  {% bootstrap_javascript jquery='full' %}
+  {{ form.media }}
+  <!-- custom  -->
+<div class="alert alert-danger print-error-msg" style="display:none">
+    <ul></ul>
+</div>
+
+<div class="fw fl mt40">
+    <form method="post" id="friend-form" class="group_form" data-state-url="/ajax/load-state/"
+          data-cities-url="/ajax/load-city/" enctype="multipart/form-data" novalidate>
+
+        <div class="row">
+            {% for field in form %}
+            <div class="col-md-6">
+                <label>{{ field.label }}</label>
+                {% csrf_token %}
+                {{ field }}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <img id="img_id" style="width:100px; height:100px; " src="" alt="your image"/>
+            </div>
+            <div class="col-md-4">
+                <img id="principle_img_id" style="width:100px; height:100px; " src="" alt="your image"/>
+            </div>
+        </div>
+        <br>
+
+        <input type="submit" class="btn btn-success" value="Save">
+
+    </form>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+    $("#id_country").change(function () {
+      var url = $("#friend-form").attr("data-state-url");
+      var countryId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'country': countryId
+        },
+        success: function (data) {
+          $("#id_state").html(data);
+        }
+      });
+
+    });
+
+</script>
+<script>
+    $("#id_state").change(function () {
+      var url = $("#friend-form").attr("data-cities-url");
+      var countryId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'country': countryId
+        },
+        success: function (data) {
+          $("#id_city").html(data);
+        }
+      });
+
+    });
+
+</script>
+
+<script type="text/javascript">
+    $('#friend-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/add_institute/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                   alert('Institute Add successfully')
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+           function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                $(".print-error-msg").find("ul").append('<li>'+key+' - '+value+'</li>');
+                return false;
+              }
+            });
+        }
+
+    });
+    // end
+
+</script>
+
+<script type="text/javascript">
+        function upload_img(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#img_id').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+</script>
+
+<script type="text/javascript">
+        function prin_sig(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#principle_img_id').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+</script>
+{% endblock %}

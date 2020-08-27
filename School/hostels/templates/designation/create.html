@@ -1,0 +1,60 @@
+{%  extends 'institute/base.html' %}
+
+{% block content %}
+<br>
+<div class="alert alert-danger print-error-msg" style="display:none">
+    <ul></ul>
+</div>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card card-body">
+            <h5>Designation </h5>
+        </div>
+        <div class="card card-body">
+            <form id="friend-form" method="POST"novalidate>
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $('#friend-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/add_designation/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                   alert('Designation Add successfully')
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+           function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                $(".print-error-msg").find("ul").append('<li>'+key+' - '+value+'</li>');
+                return false;
+              }
+            });
+        }
+
+    });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends 'institute/base.html' %}
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Designation</th>
+      <th scope="col">Joining Date</th>
+      <th scope="col">Blood Group</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ teachers.full_name }}</td>
+      <td>{{ teachers.teacher_designation }}</td>
+      <td>{{ teachers.joining_date }}</td>
+      <td>{{ teachers.blood_group }}</td>
+    </tr>
+
+  </tbody>
+</table>
+{% endblock %}
