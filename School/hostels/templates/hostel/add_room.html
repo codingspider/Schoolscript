@@ -2,38 +2,74 @@
 
 {% block content %}
 
-		<br>
-		<div class="row">
-			<div class="col-md-8 offset-md-2">
-				<div class="card card-body">
-					<h5>Hostel</h5>
-				</div>
-				<div class="card card-body">
-					<form action="/add_hostel_room" method="POST">
-						{% csrf_token %}
-						<input type="text" name="pk" id="pk" value="{{hostel_id}}">
-						<div class="form-group">
-							<label for="exampleInputEmail1">Name</label>
-							<select name="hostel_id" id="" class="form-control select2" multiple>
-								{% for row in hostel  %}
-									<option value="{{row.id}}">{{row.name}}</option>
-								{% endfor %}
-							</select>
-							<label for="exampleInputEmail1">Number</label>
-							<select name="room_id" id="" class="form-control select2" multiple>
-								{% for row in room  %}
-									<option value="{{row.id}}">{{row.number}}</option>
-								{% endfor %}
-							</select>
+<br>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card card-body">
+            <h5>Hostel</h5>
+        </div>
+        <div class="card card-body">
+            <form id="friend-form" method="POST" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="pk" id="pk" value="{{hostel_id}}">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Name</label>
+                    <select name="hostel_id" class="form-control select2" multiple>
+                        {% for row in hostel %}
+                        <option value="{{row.id}}">{{row.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="exampleInputEmail1">Number</label>
+                    <select name="room_id" class="form-control select2" multiple>
+                        {% for row in room %}
+                        <option value="{{row.id}}">{{row.number}}</option>
+                        {% endfor %}
+                    </select>
 
-							<span class="text-danger">{{form.errors.number}}</span>
-						</div>
-						
-						<button type="submit" class="btn btn-success">Submit</button>
-					</form>
-				</div>
-			</div>
-			
-		</div>
+                    <span class="text-danger">{{form.errors.number}}</span>
+                </div>
 
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $('#friend-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/add_hostel_room/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                   alert('Room Add successfully')
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+           function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                $(".print-error-msg").find("ul").append('<li>'+key+' - '+value+'</li>');
+                return false;
+              }
+            });
+        }
+
+    });
+
+</script>
 {% endblock content %}

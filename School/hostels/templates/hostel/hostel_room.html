@@ -31,8 +31,8 @@
 						<td>{% available_seat row.id hostel_id %}</td>
 
 						<td>
-						<a href="{% url 'add_student' hostel_id row.id %}" class="btn btn-primary" title="Student"><i class="fa fa-user"></i></a>
-						<a onclick='return confirm("Are you sure you want to do this?")' href="/delete_room/{{row.id}}" class="btn btn-danger">Delete</a></td>
+						<a href="/assign_student/{{ hostel_id }}/{{ row.id }}" class="btn btn-primary" title="Student"><i class="fa fa-user"></i></a>
+						<button class="btn btn-danger" onClick="deleteUser({{row.id}})"><i class="fa fa-trash"></i></button>
 					</tr>
 				{% endfor %}
 
@@ -40,8 +40,24 @@
 		</div>
 	</div>
 
-	
-
 </div>
-  
+  <script type="text/javascript">
+function deleteUser(id) {
+  var action = confirm("Are you sure you want to delete this Data?");
+  if (action != false) {
+    $.ajax({
+        url: '/delete_room/',
+        data: {
+            'id': id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.deleted) {
+             alert('Data Deleted Successfully !')
+            }
+        }
+    });
+  }
+}
+</script>
 {% endblock  %}

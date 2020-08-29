@@ -1,252 +1,421 @@
+from django.core import serializers
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.urls import reverse
+from django.http import HttpResponse, JsonResponse
+from django.urls import reverse, reverse_lazy
+from django.views import View
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
+
 from .models import *
 from .form import *
 from django.contrib import messages
 import mimetypes
 # Create your views here.
 
-def author(request):
-    authors=Author.objects.all().order_by('-id')
-    contex = {'authors':authors}
-    return render(request, 'author/index.html',contex)
 
-def author_create(request):
-    form = AuthorForm()
-    if request.method=='POST':
-        author=request.POST
-        form = AuthorForm(request.POST) 
+class AuthorListView(View):
+    form_class = AuthorForm
+    model = Author
+
+    def get(self, request):
+        authors = Author.objects.all().order_by('-id')
+        contex = {'authors': authors}
+        return render(request, 'author/index.html', contex)
+
+
+class AuthorCreateView(CreateView):
+    model = Author
+    form_class = AuthorForm
+    template_name = 'author/create.html'
+    success_url = reverse_lazy('authors')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
-           author=form.save()
-           messages.success(request,'Data store successfull',extra_tags='success')
-           return redirect('/author_list')
-    context = {'form':form}
-    return render(request, 'author/create.html',context)
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-def author_edit(request, pk):
-    author=Author.objects.get(id=pk)
-    form = AuthorForm(instance=author)
-    if request.method=='POST':
-        form = AuthorForm(request.POST, instance=author)
+
+class AuthorEditView(UpdateView):
+    model = Author
+    template_name = 'author/update.html'
+    context_object_name = 'author'
+    fields = ('name',  'description',)
+    success_url = reverse_lazy('authors')
+
+
+class AuthorUpdateView(View):
+    form_class = AuthorForm
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
         if form.is_valid():
-           form.save()
-           messages.success(request,'Data update successfull',extra_tags='success')
-           return redirect('/author_list')
+            author = Author.objects.get(pk=request.POST.get('author_id'))
+            author.name = request.POST.get('name')
+            author.description = request.POST.get('description', )
+            author.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-    context={'form':form}
-    return render(request, 'author/create.html',context)
 
-def author_delete(request,pk):
-    author=Author.objects.get(id=pk)
-    author.delete()
-    messages.success(request,'Data delete successfull',extra_tags='success')
-    return redirect('/author_list') 
+class AuthorDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Author.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 
 #-----------------------publisher------------------------
+class PublisherListView(ListView):
+    form_class = PublisherForm
+    model = Publisher
 
-def publisher(request):
-    publishers=Publisher.objects.all().order_by('-id')
-    contex = {'publishers':publishers}
-    return render(request, 'publisher/index.html',contex)
+    def get(self, request):
+        publishers = Publisher.objects.all().order_by('-id')
+        contex = {'publishers': publishers}
+        return render(request, 'publisher/index.html', contex)
 
-def publisher_create(request):
-    form = PublisherForm()
-    if request.method=='POST':
-        publisher=request.POST
-        form = PublisherForm(request.POST) 
+
+class PublisherAddView(CreateView):
+    model = Publisher
+    form_class = PublisherForm
+    template_name = 'publisher/create.html'
+    success_url = reverse_lazy('publishers')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
-           publisher=form.save()
-           messages.success(request,'Data store successfull',extra_tags='success')
-           return redirect('/publisher_list')
-    context = {'form':form}
-    return render(request, 'publisher/create.html',context)
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-def publisher_edit(request, pk):
-    publisher=Publisher.objects.get(id=pk)
-    form = PublisherForm(instance=publisher)
-    if request.method=='POST':
-        form = PublisherForm(request.POST, instance=publisher)
+
+class PublisherEditView(UpdateView):
+    model = Publisher
+    template_name = 'publisher/update.html'
+    context_object_name = 'publisher'
+    fields = ('name', 'description',)
+    success_url = reverse_lazy('publishers')
+
+
+class PublisherUpdateView(View):
+    form_class = PublisherForm
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
         if form.is_valid():
-           form.save()
-           messages.success(request,'Data update successfull',extra_tags='success')
-           return redirect('/publisher_list')
+            rooms = Publisher.objects.get(pk=request.POST.get('publisher_id'))
+            rooms.name = request.POST.get('name')
+            rooms.description = request.POST.get('description', )
+            rooms.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-    context={'form':form}
-    return render(request, 'publisher/create.html',context)
 
-def publisher_delete(request,pk):
-    publisher=Publisher.objects.get(id=pk)
-    publisher.delete()
-    messages.success(request,'Data delete successfull',extra_tags='success')
-    return redirect('/publisher_list')
+class PublisherDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Publisher.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 
 #-----------------------subject------------------------
+class SubjectListView(ListView):
+    form_class = SubjectForm
+    model = Subject
 
-def subject(request):
-    subjects=Subject.objects.all().order_by('-id')
-    contex = {'subjects': subjects}
-    return render(request, 'subject/index.html',contex)
+    def get(self, request):
+        publishers = Subject.objects.all().order_by('-id')
+        contex = {'subjects': publishers}
+        return render(request, 'subject/index.html', contex)
 
-def subject_create(request):
-    form = SubjectForm()
-    if request.method=='POST':
-        subject=request.POST
-        form = SubjectForm(request.POST) 
+
+class SubjectAddView(CreateView):
+    model = Subject
+    form_class = SubjectForm
+    template_name = 'subject/create.html'
+    success_url = reverse_lazy('subjects')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
-           subject=form.save()
-           messages.success(request,'Data store successfull',extra_tags='success')
-           return redirect('/subject_list')
-    context = {'form':form}
-    return render(request, 'subject/create.html',context)
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-def subject_edit(request, pk):
-    subject=Subject.objects.get(id=pk)
-    form = SubjectForm(instance=subject)
-    if request.method=='POST':
-        form = SubjectForm(request.POST, instance=subject)
+
+class SubjectEditView(UpdateView):
+    model = Subject
+    template_name = 'subject/update.html'
+    context_object_name = 'room'
+    fields = ('name', 'description',)
+    success_url = reverse_lazy('subjects')
+
+
+class SubjectUpdateView(View):
+    form_class = SubjectForm
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
         if form.is_valid():
-           form.save()
-           messages.success(request,'Data update successfull',extra_tags='success')
-           return redirect('/subject_list')
+            subject = Subject.objects.get(pk=request.POST.get('subject_id'))
+            subject.name = request.POST.get('name')
+            subject.description = request.POST.get('description', )
+            subject.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-    context={'form':form}
-    return render(request, 'subject/create.html',context)
 
-def subject_delete(request,pk):
-    subject=Subject.objects.get(id=pk)
-    subject.delete()
-    messages.success(request,'Data delete successfull',extra_tags='success')
-    return redirect('/subject_list')
+class SubjectDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Subject.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 
 #-----------------------book_language------------------------
 
+class BookLanguageListView(ListView):
+    model = BookLanguage
+    context_object_name = 'book_language'
+    form_class = BookLanguageForm
+    initial = {'key': 'value'}
+    template_name = 'book_language/index.html'
 
-def book_language(request):
-    book_languages=BookLanguage.objects.all().order_by('-id')
-    contex = {'book_languages':book_languages}
-    return render(request, 'book_language/index.html',contex)
+    def get(self, request):
+        book_languagess = BookLanguage.objects.all().order_by('-id')
+        form = self.form_class(initial=self.initial)
+        context = {'book_languages': book_languagess, 'form': form}
+        return render(request, self.template_name, context)
 
-def book_language_create(request):
-    form = BookLanguageForm()
-    if request.method=='POST':
-        book_language=request.POST
-        form = BookLanguageForm(request.POST) 
+
+class BookLanguageAddView(CreateView):
+    model = BookLanguage
+    form_class = BookLanguageForm
+    template_name = 'book_language/create.html'
+    success_url = reverse_lazy('book_language_list')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
-           book_language=form.save()
-           messages.success(request,'Data store successfull',extra_tags='success')
-           return redirect('/book_language_list')
-    context = {'form':form}
-    return render(request, 'book_language/create.html',context)
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-def book_language_edit(request, pk):
-    book_language=BookLanguage.objects.get(id=pk)
-    form = BookLanguageForm(instance=book_language)
-    if request.method=='POST':
-        form = BookLanguageForm(request.POST, instance=book_language)
+
+class BookLanguageEditView(UpdateView):
+    model = BookLanguage
+    template_name = 'book_language/update.html'
+    context_object_name = 'room'
+    fields = ('name', 'description',)
+    success_url = reverse_lazy('room_list')
+
+
+class BookLanguageUpdateView(View):
+    form_class = BookLanguageForm
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
         if form.is_valid():
-           form.save()
-           messages.success(request,'Data update successfull',extra_tags='success')
-           return redirect('/book_language_list')
+            rooms = BookLanguage.objects.get(pk=request.POST.get('book_lang_id'))
+            rooms.name = request.POST.get('name')
+            rooms.description = request.POST.get('description', )
+            rooms.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-    context={'form':form}
-    return render(request, 'book_language/create.html',context)
 
-def book_language_delete(request,pk):
-    book_language=BookLanguage.objects.get(id=pk)
-    book_language.delete()
-    messages.success(request,'Data delete successfull',extra_tags='success')
-    return redirect('/book_language_list')
+class BookLanguageDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        BookLanguage.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 
 #-----------------------rack------------------------
 
+class RackListView(ListView):
+    model = Rack
+    context_object_name = 'rack'
+    form_class = RackForm
+    initial = {'key': 'value'}
+    template_name = 'rack/index.html'
 
-def rack(request):
-    racks=Rack.objects.all().order_by('number')
-    contex = {'racks':racks}
-    return render(request, 'rack/index.html',contex)
+    def get(self, request):
+        racks = Rack.objects.all().order_by('-id')
+        form = self.form_class(initial=self.initial)
+        context = {'racks': racks, 'form': form}
+        return render(request, self.template_name, context)
 
-def rack_create(request):
-    form = RackForm()
-    if request.method=='POST':
-        rack=request.POST
-        form = RackForm(request.POST) 
+
+class RackAddView(CreateView):
+    model = Rack
+    form_class = RackForm
+    template_name = 'rack/create.html'
+    success_url = reverse_lazy('rack_list')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
-           rack=form.save()
-           messages.success(request,'Data store successfull',extra_tags='success')
-           return redirect('/rack_list')
-    context = {'form':form}
-    return render(request, 'rack/create.html',context)
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-def rack_edit(request, pk):
-    rack=Rack.objects.get(id=pk)
-    form = RackForm(instance=rack)
-    if request.method=='POST':
-        form = RackForm(request.POST, instance=rack)
+
+class RoomEditView(UpdateView):
+    model = Rack
+    template_name = 'rack/update.html'
+    context_object_name = 'rack'
+    fields = ('number', 'name', )
+    success_url = reverse_lazy('room_list')
+
+
+class RoomUpdateView(View):
+    form_class = RackForm
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
         if form.is_valid():
-           form.save()
-           messages.success(request,'Data update successfull',extra_tags='success')
-           return redirect('/rack_list')
+            rooms = Rack.objects.get(pk=request.POST.get('rack_id'))
+            rooms.number = request.POST.get('number')
+            rooms.name = request.POST.get('name', )
+            rooms.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-    context={'form':form}
-    return render(request, 'rack/create.html',context)
 
-def rack_delete(request,pk):
-    rack=Rack.objects.get(id=pk)
-    rack.delete()
-    messages.success(request,'Data delete successfull',extra_tags='success')
-    return redirect('/rack_list')
+class RackDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Rack.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 
 
 #-----------------------book------------------------
 
+class BookListView(ListView):
+    model = Book
+    context_object_name = 'types'
+    form_class = BookForm
+    initial = {'key': 'value'}
+    template_name = 'book/index.html'
 
-def book(request):
-    books=Book.objects.all().order_by('-id')
-    contex = {'books':books}
-    return render(request, 'book/index.html',contex)
+    def get(self, request):
+        books = Book.objects.all().order_by('-id')
+        form = self.form_class(initial=self.initial)
+        context = {'books': books, 'form': form}
+        return render(request, self.template_name, context)
 
-def book_view(request, pk):
-    book=Book.objects.get(id=pk)
-    issue_list=BookIssue.objects.filter(book=pk, status=0)
-    context={'book':book, 'issue_list':issue_list}
-    return render(request, 'book/view.html',context)
 
-def book_create(request):
-    form = BookForm()
-    if request.method=='POST':
-        book=request.POST
-        form = BookForm(request.POST, request.FILES) 
+class BookAddView (CreateView):
+    model = Book
+    form_class = BookForm
+    template_name = 'book/create.html'
+    success_url = reverse_lazy('book_list')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-           book=form.save()
-           messages.success(request,'Data store successfull',extra_tags='success')
-           return redirect('/book_list')
-    context = {'form':form}
-    return render(request, 'book/create.html',context)
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-def book_edit(request, pk):
-    book=Book.objects.get(id=pk)
-    form = BookForm(instance=book)
-    if request.method=='POST':
-        form = BookForm(request.POST, request.FILES, instance=book)
+
+class BookEditView(UpdateView):
+    model = Book
+    template_name = 'book/update.html'
+    context_object_name = 'room'
+    fields = ('title', 'book_number', 'isbn_number', 'price', 'qty','publisher', 'author', 'subject', 'book_language', 'rack',
+              'description', 'image', 'status',
+              )
+    success_url = reverse_lazy('book_list')
+
+
+class BookUpdateView(View):
+    model = Book
+    form_class = BookForm
+
+    def post(self, request):
+        form = self.form_class(request.POST, request.FILES)
+
         if form.is_valid():
-           form.save()
-           messages.success(request,'Data update successfull',extra_tags='success')
-           return redirect('/book_list')
+            book = Book.objects.get(pk=request.POST.get('book_id'))
+            book.image = request.FILES.get('image')
+            book.book_number = request.POST.get('book_number', )
+            book.isbn_number = request.POST.get('isbn_number', )
+            book.price = request.POST.get('price', )
+            book.qty = request.POST.get('qty', )
+            book.publisher_id = request.POST.get('publisher_id', )
+            book.author_id = request.POST.get('author_id', )
+            book.subject_id = request.POST.get('subject_id', )
+            book.book_language_id = request.POST.get('book_language_id', )
+            book.rack_id = request.POST.get('rack_id', )
+            book.status = request.POST.get('status', )
+            book.title = request.POST.get('title', )
+            book.description = request.POST.get('description', )
+            book.save()
 
-    context={'form':form}
-    return render(request, 'book/create.html',context)
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-def book_delete(request,pk):
-    book=Book.objects.get(id=pk)
-    book.delete()
-    messages.success(request,'Data delete successfull',extra_tags='success')
-    return redirect('/book_list')
+
+class BookDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Book.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+
+class BookDetailView(DetailView):
+    queryset = Book.objects.all()
+    template_name = "book/view.html"
+
+    # def get(self, request, pk):
+    #     book = Book.objects.filter(pk=pk)
+    #     return render(request, 'book/view.html', {'book': book})
+
 
 
 def ebook(request):
@@ -308,21 +477,22 @@ def book_issue_view(request, pk):
     context={'book_issue':book_issue}
     return render(request, 'book_issue/view.html',context)
 
+
 def book_issue_create(request,pk):
-    total_issue=BookIssue.objects.filter(book=pk, status=0).count()
-    total_qty=Book.objects.filter(id=pk).get()
+    total_issue = BookIssue.objects.filter(book=pk, status=0).count()
+    total_qty = Book.objects.filter(id=pk).get()
     if total_qty.qty > total_issue:
         print(total_qty)
     else:
-        messages.success(request,'Insuficient quantity',extra_tags='error')
+        messages.success(request,'Insuficient quantity', extra_tags='error')
         return redirect('/book_list')
     form = BookIssueForm()
-    if request.method=='POST':
-        book_issue=request.POST
-        form = BookIssueForm(request.POST) 
+    if request.method == 'POST':
+        book_issue = request.POST
+        form = BookIssueForm(request.POST)
         if form.is_valid():
-           book_issue=form.save()
-           messages.success(request,'Data store successfull',extra_tags='success')
+           book_issue = form.save()
+           messages.success(request,'Data store successfull', extra_tags='success')
            return redirect('/book_issue_list')
     context = {'form':form, 'book':pk}
     return render(request, 'book_issue/create.html',context)

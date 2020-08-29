@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'django_select2',
     'commitee',
     'ajax',
-    'teste.apps.TesteConfig'
+    'teste.apps.TesteConfig',
+    'modelmanager',
+    'libraries'
     
 ]
 DATETIME_FORMAT = '%Y-%m-%d %I:%M %p'

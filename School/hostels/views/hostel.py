@@ -1,6 +1,7 @@
+from django.core import serializers
 from django.shortcuts import render
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 from django.views import View
@@ -29,13 +30,21 @@ class HostelListView(ListView):
 class AddHostelView(CreateView):
     model = Hostel
     template_name = 'hostel/create.html'
-    fields = (
-        'name', 'address', 'history', 'description', 'type', 'room',
-    )
+    form_class = HostelForm
     success_url = reverse_lazy('hostels')
 
+    def post(self, request):
+        if request.method == 'POST':
+            form = self.form_class(request.POST)
+            if form.is_valid():
+                instance = form.save()
+                ser_instance = serializers.serialize('json', [instance, ])
+                return JsonResponse({"instance": ser_instance}, status=200)
+            else:
+                return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-class HostelUpdateView(UpdateView):
+
+class HostelEditView(UpdateView):
     model = Hostel
     template_name = 'hostel/edit.html'
     context_object_name = 'institute'
@@ -45,12 +54,36 @@ class HostelUpdateView(UpdateView):
         return reverse_lazy('hostels')
 
 
+class HostelUpdateView(View):
+
+    form_class = HostelForm
+    model = Hostel
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            hostel = Hostel.objects.get(pk=request.POST.get('hostel_id'))
+            hostel.name = request.POST.get('name')
+            hostel.address = request.POST.get('address')
+            hostel.history = request.POST.get('history')
+            hostel.description = request.POST.get('description')
+            hostel.hostel_type = request.POST.get('hostel_type')
+            # hostel.room = request.POST.get('room')
+            hostel.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+
+
 class HostelDeleteView(DeleteView):
-    def get(self, request, pk):
-        hostel_type= Hostel.objects.get(id=pk)
-        hostel_type.delete()
-        messages.success(request, 'Data delete successful', extra_tags='success')
-        return redirect('hostels')
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Hostel.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 
 class HostelDetailView(DetailView):
@@ -87,10 +120,8 @@ class AddRoomViewHostel(View):
                 for row in request.POST.getlist('room_id'):
                     room1 = Room.objects.filter(id=row).get()
                     hostel.room.add(room1)
-                messages.success(request, 'Data store successful', extra_tags='success')
                 return redirect(reverse('hostels'))
             else:
-                messages.success(request, 'please select a room', extra_tags='error')
                 return redirect(reverse('hostel.add_room', args=[pk]))
         context={'room':room}
         return render(request, 'hostel/add_room.html',context)

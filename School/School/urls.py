@@ -17,6 +17,8 @@ urlpatterns = [
     path('', include('commitee.urls')),
     url(r'^join/', JoinFormView.as_view()),
     url('teste/', include('teste.urls')),
+    url('', include('modelmanager.urls')),
+    url('', include('libraries.urls'))
 
 
 ]

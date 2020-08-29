@@ -1,20 +1,29 @@
+from django.core import serializers
 from django.shortcuts import render
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse, reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 from ..models import Room, RoomType
-from ..form import RoomForm
+from ..form import RoomForm, RoomTypeForm
 
 
 class TypeCreateView(CreateView):
     model = RoomType
     template_name = 'roomtype/create.html'
-    fields = (
-        'type', 'description',
-    )
+    form_class = RoomTypeForm
     success_url = reverse_lazy('room_types_list')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
 
 class RoomTypeListView(ListView):
@@ -33,16 +42,36 @@ class RoomTypeListView(ListView):
 
 class RoomTypeUpdateView(UpdateView):
     model = RoomType
-    template_name = 'roomtype/create.html'
+    template_name = 'roomtype/update.html'
     context_object_name = 'room'
     fields = ( 'type', 'description',)
     success_url = reverse_lazy('room_types_list')
 
 
+class RoomTypeUpdate(View):
+    model = RoomType
+    form_class = RoomTypeForm
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            room_type = RoomType.objects.get(pk=request.POST.get('room_id'))
+            room_type.type = request.POST.get('type')
+            room_type.description = request.POST.get('description', )
+            room_type.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+
+
 class RoomTypeDeleteView(DeleteView):
-    def get(self, request, pk):
-        room_type=RoomType.objects.get(id=pk)
-        room_type.delete()
-        return redirect('room_types_list')
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        RoomType.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 
