@@ -124,7 +124,7 @@ class AddRoomViewHostel(View):
             else:
                 return redirect(reverse('hostel.add_room', args=[pk]))
         context={'room':room}
-        return render(request, 'hostel/add_room.html',context)
+        return render(request, 'hostel/add_room.html', context)
 
 
 class DeleteHostelRoomView(View):

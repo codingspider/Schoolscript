@@ -1,0 +1,93 @@
+{%  extends 'institute/base.html' %}
+
+{% block content %}
+<br>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-body">
+            <h5>Issue Book</h5>
+        </div>
+        <div class="alert alert-danger print-error-msg" style="display:none">
+            <ul></ul>
+        </div>
+        <div class="card card-body">
+            <form id="friend-form" method="POST" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="issue_id" id="issue_id" value="{{ object.id }}">
+                {% if book %}
+                <input type="hidden" name="book" value="{{book.id}}">
+                {% else %}
+                <input type="hidden" name="book" value="{{book.id}}">
+                {% endif %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Member</label>
+                            {{form.member}}
+                            <span class="text-danger">{{form.errors.member}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Issue Date</label>
+                            {{form.issue_date}}
+                            <span class="text-danger">{{form.errors.issue_date}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Return Date</label>
+                            {{form.return_date}}
+                            <span class="text-danger">{{form.errors.return_date}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Note</label>
+                            {{form.note}}
+                            <span class="text-danger">{{form.errors.note}}</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $('#friend-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/book_issue_update/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                   alert('Book Issue Updated successfully')
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+           function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                $(".print-error-msg").find("ul").append('<li>'+key+' - '+value+'</li>');
+                return false;
+              }
+            });
+        }
+
+    });
+</script>
+{% endblock content %}

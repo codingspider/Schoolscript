@@ -17,7 +17,6 @@
 					<th>Type</th>
 					<th>Cost Per Bed</th>
 					<th>Number of Bed</th>
-					<th>Available Seat</th>
 
 					<th>Action</th>
 				</tr>
@@ -28,11 +27,11 @@
 						<td>{{row.type}}</td>
 						<td>{{row.bed_cost}}</td>
 						<td>{{row.number_of_bed}}</td>
-						<td>{% available_seat row.id hostel_id %}</td>
 
 						<td>
 						<a href="/assign_student/{{ hostel_id }}/{{ row.id }}" class="btn btn-primary" title="Student"><i class="fa fa-user"></i></a>
 						<button class="btn btn-danger" onClick="deleteUser({{row.id}})"><i class="fa fa-trash"></i></button>
+						</td>
 					</tr>
 				{% endfor %}
 

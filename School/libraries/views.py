@@ -433,7 +433,7 @@ class EbookListView(ListView):
 
 def ebook_view(request, pk):
     ebook=EBook.objects.get(id=pk)
-    context={'ebook':ebook}
+    context={'ebook': ebook}
     return render(request, 'ebook/view.html',context)
 
 
@@ -531,21 +531,24 @@ def book_issue_create(request,pk):
            book_issue = form.save()
            messages.success(request,'Data store successfull', extra_tags='success')
            return redirect('/book_issue_list')
-    context = {'form':form, 'book':pk}
+    context = {'form': form, 'book': pk}
     return render(request, 'book_issue/create.html',context)
 
-def book_issue_edit(request, pk):
-    book_issue=BookIssue.objects.get(id=pk)
-    form = BookIssueForm(instance=book_issue)
-    if request.method=='POST':
-        form = BookIssueForm(request.POST, instance=book_issue)
-        if form.is_valid():
-           form.save()
-           messages.success(request,'Data update successfull',extra_tags='success')
-           return redirect('/book_issue_list')
 
-    context={'form':form,'book':book_issue.book.id}
-    return render(request, 'book_issue/create.html',context)
+class BookIssueEditView(UpdateView):
+    model = BookIssue
+    template_name = 'book_issue/update.html'
+    context_object_name = 'book_issue'
+    fields = ('member', 'issued_by', 'book', 'note', 'status','issue_date', 'return_date')
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy("book_issue_list", args=(self.object.book,))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = self.object.book
+        return context
+
 
 def make_return(request,pk):
     #book_issue=BookIssue.objects.get(id=pk)
@@ -553,8 +556,35 @@ def make_return(request,pk):
     messages.success(request,'Data delete successfull',extra_tags='success')
     return redirect('/book_issue_list')
 
-def book_issue_delete(request,pk):
-    book_issue=BookIssue.objects.get(id=pk)
-    book_issue.delete()
-    messages.success(request,'Data delete successfull',extra_tags='success')
-    return redirect('/book_issue_list')
+
+class BookIssueDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        BookIssue.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+
+class BookIssueUpdateView(View):
+    form_class = BookIssueForm
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            book_issue = BookIssue.objects.get(pk=request.POST.get('issue_id'))
+            book_issue.member_id = request.POST.get('member_id')
+            book_issue.issued_by = request.POST.get('issued_by', )
+            book_issue.book_id = request.POST.get('book', )
+            book_issue.note = request.POST.get('note', )
+            book_issue.status = request.POST.get('status', )
+            book_issue.issue_date = request.POST.get('issue_date', )
+            book_issue.return_date = request.POST.get('return_date', )
+            book_issue.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+
+
