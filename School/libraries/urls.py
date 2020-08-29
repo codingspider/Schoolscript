@@ -48,11 +48,12 @@ urlpatterns = [
     
     
     #ebook
-    path('ebook_list',views.ebook, name="ebook.list"),
-    path('ebook/view/<int:pk>',views.ebook_view, name="ebook.view"),
-    path('ebook/create',views.ebook_create, name="ebook.create"),
-    path('ebook/edit/<int:pk>',views.ebook_edit, name="ebook.edit"),
-    path('ebook/delete/<int:pk>',views.ebook_delete, name="ebook.delete"),
+    path('ebook_list', views.EbookListView.as_view(), name="ebook_list"),
+    path('ebook/view/<int:pk>', views.ebook_view, name="ebook.view"),
+    path('add_ebook/', views.AddEbookView.as_view(), name="add_ebook"),
+    path('edit_ebook/<int:pk>', views.EbookEditView.as_view(), name="edit_ebook"),
+    path('update_ebook/', views.EbookUpdateView.as_view(), name="update_ebook"),
+    path('delete_ebook/', views.EbookDeleteView.as_view(), name="delete_ebook"),
 
 
     #book_issue

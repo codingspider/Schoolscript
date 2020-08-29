@@ -104,7 +104,7 @@ class EBook(models.Model):
     subject=models.ForeignKey(Subject,null=True, on_delete=models.SET_NULL)
     book_language=models.ForeignKey(BookLanguage,null=True, on_delete=models.SET_NULL)
     description=models.TextField(null=True, blank=True)
-    image=models.ImageField(null=True, validators=[validate_image])
+    image=models.ImageField(null=True,blank=True, validators=[validate_image])
     file=models.FileField(upload_to='ebook', null=True, validators=[validate_file])
     status=models.IntegerField(default=0, null=True, blank=True)
     post_date=models.DateTimeField(auto_now_add=True)

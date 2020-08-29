@@ -417,49 +417,86 @@ class BookDetailView(DetailView):
     #     return render(request, 'book/view.html', {'book': book})
 
 
+class EbookListView(ListView):
+    model = EBook
+    context_object_name = 'types'
+    form_class = EBookForm
+    initial = {'key': 'value'}
+    template_name = 'ebook/index.html'
 
-def ebook(request):
-    ebooks=EBook.objects.all().order_by('-id')
-    contex = {'ebooks':ebooks}
-    return render(request, 'ebook/index.html',contex)
+    def get(self, request):
+        ebooks = EBook.objects.all().order_by('-id')
+        form = self.form_class(initial=self.initial)
+        context = {'ebooks': ebooks, 'form': form}
+        return render(request, self.template_name, context)
+
 
 def ebook_view(request, pk):
     ebook=EBook.objects.get(id=pk)
     context={'ebook':ebook}
     return render(request, 'ebook/view.html',context)
 
-def ebook_create(request):
-    form = EBookForm()
-    if request.method=='POST':
-        ebook=request.POST
-        form = EBookForm(request.POST, request.FILES) 
+
+class AddEbookView(CreateView):
+    model = EBook
+    form_class = EBookForm
+    template_name = 'ebook/create.html'
+    success_url = reverse_lazy('ebook_list')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-           ebook=form.save()
-           messages.success(request,'Data store successfull',extra_tags='success')
-           return redirect('/ebook_list')
-    context = {'form':form}
-    return render(request, 'ebook/create.html',context)
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
 
-def ebook_edit(request, pk):
-    ebook=EBook.objects.get(id=pk)
-    form = EBookForm(instance=ebook)
-    if request.method=='POST':
-        form = EBookForm(request.POST, request.FILES, instance=ebook)
+class EbookEditView(UpdateView):
+    model = EBook
+    template_name = 'ebook/update.html'
+    context_object_name = 'room'
+    fields = ('title', 'book_number', 'isbn_number', 'price', 'publisher','author', 'subject', 'book_language',
+              'description', 'image', 'file', 'status')
+    success_url = reverse_lazy('ebook_list')
+
+
+class EbookUpdateView(View):
+    form_class = EBookForm
+
+    def post(self, request):
+        form = self.form_class(request.POST, request.FILES)
+
         if form.is_valid():
-           form.save()
-           messages.success(request,'Data update successfull',extra_tags='success')
-           return redirect('/ebook_list')
+            ebooks = EBook.objects.get(pk=request.POST.get('ebook_id'))
+            ebooks.title = request.POST.get('title')
+            ebooks.book_number = request.POST.get('book_number', )
+            ebooks.isbn_number = request.POST.get('isbn_number', )
+            ebooks.price = request.POST.get('price', )
+            ebooks.description = request.POST.get('description', )
+            ebooks.publisher_id = request.POST.get('publisher_id', )
+            ebooks.author_id = request.POST.get('author_id', )
+            ebooks.subject_id = request.POST.get('subject_id', )
+            ebooks.book_language_id = request.POST.get('book_language_id', )
+            ebooks.description = request.POST.get('description', )
+            ebooks.image = request.FILES.get('image', )
+            ebooks.file = request.FILES.get('file', )
+            ebooks.status = request.POST.get('status', )
+            ebooks.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
 
-    context={'form':form}
-    return render(request, 'ebook/create.html',context)
 
-
-def ebook_delete(request, pk):
-    ebook=EBook.objects.get(id=pk)
-    ebook.delete()
-    messages.success(request,'Data delete successfull',extra_tags='success')
-    return redirect('/ebook_list')
+class EbookDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        EBook.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 
 def book_issue(request):

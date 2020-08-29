@@ -121,10 +121,10 @@ class BookForm(forms.ModelForm):
         }
 
 #---------------------e-book------------------------------
-class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None, **kwargs):
-        html =  Template("""<img src="$link"/>""")
-        return mark_safe(html.substitute(link=value))
+# class PictureWidget(forms.widgets.Widget):
+#     def render(self, name, value, attrs=None, **kwargs):
+#         html =  Template("""<img src="$link"/>""")
+#         return mark_safe(html.substitute(link=value))
 
 class EBookForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -136,7 +136,7 @@ class EBookForm(forms.ModelForm):
             self.fields['book_language'].widget.attrs.update({'class': 'form-control select2'})
             self.fields['subject'].widget.attrs.update({'class': 'form-control select2'})
             visible.field.widget.attrs['placeholder'] = 'Enter text here ...'
-    image = ImageField(widget=PictureWidget)
+    # image = ImageField(widget=PictureWidget)
     class Meta:
         model= EBook
         fields='__all__'
