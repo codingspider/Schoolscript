@@ -62,7 +62,11 @@ function deleteUser(id) {
             if (data.deleted) {
               $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
               $(".form_msg").append('<p>'+ 'Data has been deleted!' +'</p>');
+
             }
+            complete:function(){
+               $('body, html').animate({scrollTop:$('form').offset().top}, 'fast');
+            },
         }
     });
   }

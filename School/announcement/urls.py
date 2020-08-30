@@ -3,11 +3,12 @@ from .views import notice, news, holiday
 app_name = 'announcement'
 urlpatterns = [
     #notice
-    path('notices/',notice.NoticeView.as_view(), name="notices"),
-    path('notice/<int:pk>',notice.DetailNoticeView.as_view(), name="notice"),
-    path('add_notice/',notice.AddNoticeView.as_view(), name="add_notice"),
-    path('edit_notice/<int:pk>',notice.EditNoticeView.as_view(), name="edit_notice"),
-    path('delete_notice/<int:pk>',notice.DeleteNoticeView.as_view(), name="delete_notice"),
+    path('notices/', notice.NoticeView.as_view(), name="notices"),
+    path('notice/<int:pk>', notice.DetailNoticeView.as_view(), name="notice"),
+    path('add_notice/', notice.AddNoticeView.as_view(), name="add_notice"),
+    path('edit_notice/<int:pk>', notice.EditNoticeView.as_view(), name="edit_notice"),
+    path('update_notice/', notice.UpdateNoticeView.as_view(), name="update_notice"),
+    path('delete_notice/', notice.DeleteNoticeView.as_view(), name="delete_notice"),
     
     #news
     path('news/', news.NewsView.as_view(), name="news"),

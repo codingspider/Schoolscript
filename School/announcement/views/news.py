@@ -1,7 +1,8 @@
+from django.core import serializers
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.views.generic import View
-from django.urls import reverse
+from django.http import HttpResponse, JsonResponse
+from django.views.generic import View, CreateView
+from django.urls import reverse, reverse_lazy
 from ..models import News
 from ..form import NewsForm
 from django.contrib import messages
@@ -12,28 +13,32 @@ from django.utils import formats
 # Create your views here.
 
 class NewsView(View):
+
     def get(self,request):
         news=News.objects.all().order_by('-id')
         date=formats.date_format(datetime.datetime.now().date(),'Y-m-d')
         contex = {'news':news,'date':date}
         return render(request, 'news/index.html',contex)
 
-class AddNewsView(View):
-    def get(self,request):
-        form = NewsForm()
-        context = {'form':form}
-        return render(request, 'news/create.html',context)
-    def post(self,request):
-        news=request.POST
-        form = NewsForm(request.POST, request.FILES) 
+
+class AddNewsView(CreateView):
+    model = News
+    form_class = NewsForm
+    template_name = 'news/create.html'
+    success_url = reverse_lazy('news')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
-            news=form.save()
-            messages.success(request,'Data store successfull',extra_tags='success')
-            return redirect(reverse('announcement:news'))
-    
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+
 
 class DetailNewsView(View):
-    def get(self,request,pk):
+    def get(self, request, pk):
         news=News.objects.get(id=pk)
         date=formats.date_format(datetime.datetime.now().date(),'Y-m-d')
         context={'news':news,'date':date}

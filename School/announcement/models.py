@@ -5,6 +5,7 @@ import mimetypes
 import os
 # Create your models here.
 
+
 def validate_file(file):
     ext = os.path.splitext(file.name)[1]  # [0] returns path+filename
     valid_extensions = ['.pdf','.doc', '.docx', '.jpg', '.png', '.ppt', '.pptx', '.text']
@@ -15,12 +16,13 @@ def validate_file(file):
     if file_size > limit_mb * 1024 * 1024:
         raise ValidationError("Max size of file is %s KB" % limit_mb)
 
+
 class Notice(models.Model):
     STATUS = (
         (0, 'Inactive'),
         (1, 'Active'),
     )
-    notice_for=models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
+
     title=models.CharField(max_length=200, null=True )
     active_date=models.DateField(null=True, blank=True)
     description=models.TextField(null=True,blank=True)
@@ -31,12 +33,13 @@ class Notice(models.Model):
     def __str__(self):
         return self.title 
 
+
 class News(models.Model):
     STATUS = (
         (0, 'Inactive'),
         (1, 'Active'),
     )
-    notice_for=models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
+
     title=models.CharField(max_length=200, null=True )
     active_date=models.DateField(null=True, blank=True)
     description=models.TextField(null=True,blank=True)

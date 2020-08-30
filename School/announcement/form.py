@@ -9,7 +9,6 @@ class NoticeForm(forms.ModelForm):
         super(NoticeForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
-            self.fields['notice_for'].widget.attrs.update({'class': 'form-control select2'})
             visible.field.widget.attrs['placeholder'] = 'Enter text here ...'
     class Meta:
         model= Notice
@@ -25,7 +24,6 @@ class NewsForm(forms.ModelForm):
         super(NewsForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
-            self.fields['notice_for'].widget.attrs.update({'class': 'form-control select2'})
             visible.field.widget.attrs['placeholder'] = 'Enter text here ...'
     class Meta:
         model= News

@@ -1,7 +1,8 @@
+from django.core import serializers
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.views.generic import View
-from django.urls import reverse
+from django.http import HttpResponse, JsonResponse
+from django.views.generic import View, CreateView, DeleteView, UpdateView
+from django.urls import reverse, reverse_lazy
 from ..models import Notice
 from ..form import NoticeForm
 from django.contrib import messages
@@ -18,19 +19,21 @@ class NoticeView(View):
         contex = {'notices':notices,'date':date}
         return render(request, 'notice/index.html',contex)
 
-class AddNoticeView(View):
-    def get(self,request):
-        form = NoticeForm()
-        context = {'form':form}
-        return render(request, 'notice/create.html',context)
-    def post(self,request):
-        notice=request.POST
-        form = NoticeForm(request.POST, request.FILES) 
+
+class AddNoticeView(CreateView):
+    model = Notice
+    form_class = NoticeForm
+    template_name = 'notice/create.html'
+    success_url = reverse_lazy('notices')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            notice=form.save()
-            messages.success(request,'Data store successfull',extra_tags='success')
-            return redirect(reverse('announcement:notices'))
-    
+            form.save()
+            return JsonResponse({"instance": 'Success'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+
 
 class DetailNoticeView(View):
     def get(self,request,pk):
@@ -39,27 +42,43 @@ class DetailNoticeView(View):
         context={'notice':notice,'date':date}
         return render(request, 'notice/detail.html',context)
 
-class EditNoticeView(View):
-    def get(self,request,pk):
-        notice=Notice.objects.get(id=pk)
-        form = NoticeForm(instance=notice)
-        context={'form':form}
-        return render(request, 'notice/create.html',context)
-    def post(self,request,pk):
-        notice=Notice.objects.get(id=pk)
-        form = NoticeForm(request.POST, request.FILES, instance=notice)
-        if form.is_valid():
-            form.save()
-            messages.success(request,'Data update successfull',extra_tags='success')
-            return redirect(reverse('announcement:notices'))
-    
 
-class DeleteNoticeView(View):
-    def get(self,request,pk):
-        notice=Notice.objects.get(id=pk)
-        notice.delete()
-        messages.success(request,'Data delete successfull',extra_tags='success')
-        return redirect(reverse('announcement:notices'))
+class EditNoticeView(UpdateView):
+    model = Notice
+    template_name = 'notice/update.html'
+    context_object_name = 'notice'
+    fields = ('title', 'active_date', 'description', 'attachment', 'status',)
+    success_url = reverse_lazy('notices')
+
+
+class UpdateNoticeView(View):
+    form_class = NoticeForm
+
+    def post(self, request):
+        form = self.form_class(request.POST, request.FILES)
+
+        if form.is_valid():
+            rooms = Notice.objects.get(pk=request.POST.get('notice_id'))
+            rooms.title = request.POST.get('title')
+            rooms.active_date = request.POST.get('active_date', )
+            rooms.description = request.POST.get('description', )
+            rooms.attachment = request.FILES.get('attachment', )
+            rooms.status = request.POST.get('status', )
+            rooms.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+
+
+class DeleteNoticeView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Notice.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
 
 class ApprovNoticeView(View):
     def get(self,request,pk):

@@ -2,67 +2,113 @@
 
 {% block content %}
 
-		<br>
-		<div class="row">
-			<div class="col-md-8 offset-md-2">
-				<div class="card card-body">
-					<h5>Notice</h5>
-				</div>
-				<div class="card card-body">
-					<form action="" method="POST" enctype="multipart/form-data">
-						{% csrf_token %}
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label for="exampleInputEmail1">{{ form.title.label }}</label>
-									{{form.title}}
-									<span class="text-danger">{{form.errors.title}}</span>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="exampleInputEmail1">{{ form.notice_for.label }}</label>
-									{{form.notice_for}}
-									<span class="text-danger">{{form.errors.notice_for}}</span>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="exampleInputEmail1">{{ form.active_date.label }}</label>
-									{{form.active_date}}
-									<span class="text-danger">{{form.errors.active_date}}</span>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="exampleInputEmail1">{{ form.status.label }}</label>
-									{{form.status}}
-									<span class="text-danger">{{form.errors.status}}</span>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="exampleInputEmail1">{{ form.attachment.label }}</label>
-									{{form.attachment}}
-									<span class="text-danger">{{form.errors.attachment}}</span>
-								</div>
-							</div>
-							
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label for="exampleInputEmail1">{{ form.description.label }}</label>
-									{{form.description}}
-									<span class="text-danger">{{form.errors.description}}</span>
-								</div>
-							</div>
-						</div>
-						<button type="submit" class="btn btn-success">Submit</button>
-					</form>
-				</div>
-			</div>
-			
-		</div>
+<br>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card card-body">
+            <h5>Notice</h5>
+        </div>
+        <div class="alert alert-danger print-error-msg" style="display:none">
+        </div>
+        <p class="form_msg text-center">
+        <div class="card card-body">
+            <form id="news-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">{{ form.title.label }}</label>
+                            {{form.title}}
+                            <span class="text-danger">{{form.errors.title}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">{{ form.notice_for.label }}</label>
+                            {{form.notice_for}}
+                            <span class="text-danger">{{form.errors.notice_for}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">{{ form.active_date.label }}</label>
+                            {{form.active_date}}
+                            <span class="text-danger">{{form.errors.active_date}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">{{ form.status.label }}</label>
+                            {{form.status}}
+                            <span class="text-danger">{{form.errors.status}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">{{ form.attachment.label }}</label>
+                            {{form.attachment}}
+                            <span class="text-danger">{{form.errors.attachment}}</span>
+                        </div>
+                    </div>
 
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">{{ form.description.label }}</label>
+                            {{form.description}}
+                            <span class="text-danger">{{form.errors.description}}</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $('#news-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/add_news/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                    printSuccess('Success');
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+
+        function printSuccess(msg) {
+            $(".form_msg").html('');
+            $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
+            $(".form_msg").append('<p>'+msg+'</p>');
+        }
+
+           function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                $(".print-error-msg").append('<p>'+key+' - '+value+'</p>');
+                return false;
+              }
+            });
+        }
+
+    });
+
+</script>
 {% endblock content %}
