@@ -2,17 +2,12 @@
 
 {% block content %}
 
-  <!-- custom  -->
-  {% bootstrap_javascript jquery='full' %}
-  {{ form.media }}
-  <!-- custom  -->
 <div class="alert alert-danger print-error-msg" style="display:none">
     <ul></ul>
 </div>
 
 <div class="fw fl mt40">
-    <form method="post" id="friend-form" class="group_form" data-state-url="/ajax/load-state/"
-          data-cities-url="/ajax/load-city/" enctype="multipart/form-data" novalidate>
+    <form method="post" id="friend-form" class="group_form"  enctype="multipart/form-data" novalidate>
 
         <div class="row">
             {% for field in form %}
@@ -41,42 +36,6 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-<script>
-    $("#id_country").change(function () {
-      var url = $("#friend-form").attr("data-state-url");
-      var countryId = $(this).val();
-
-      $.ajax({
-        url: url,
-        data: {
-          'country': countryId
-        },
-        success: function (data) {
-          $("#id_state").html(data);
-        }
-      });
-
-    });
-
-</script>
-<script>
-    $("#id_state").change(function () {
-      var url = $("#friend-form").attr("data-cities-url");
-      var countryId = $(this).val();
-
-      $.ajax({
-        url: url,
-        data: {
-          'country': countryId
-        },
-        success: function (data) {
-          $("#id_city").html(data);
-        }
-      });
-
-    });
-
-</script>
 
 <script type="text/javascript">
     $('#friend-form').submit(function(e){

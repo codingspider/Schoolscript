@@ -43,7 +43,7 @@ class StudentDetailsView(View):
         return render(request, 'student/detail.html', {'students': students})
 
 
-class StudentUpdateView(UpdateView):
+class StudentEditView(UpdateView):
     model = Student
     template_name = 'student/update.html'
     context_object_name = 'institute'
@@ -52,7 +52,7 @@ class StudentUpdateView(UpdateView):
               'birth_id_number', 'phone_number', 'email', 'old_school_address', 'cause_for_leave',
               'house_no', 'house_name', 'road_no', 'village', 'post', 'union', 'upozilla', 'district',
               'postal_code', 'permanent_village', 'permanent_post', 'permanent_union', 'permanent_upozilla',
-              'permanent_district', 'permanent_postal_code', 'image'
+              'permanent_district', 'permanent_postal_code', 'student_image'
 
               )
 
@@ -60,10 +60,61 @@ class StudentUpdateView(UpdateView):
         return reverse_lazy('students')
 
 
+class StudentUpdateView(View):
+    form_class = StudentForm
+
+    def post(self, request):
+        form = self.form_class(request.POST, request.FILES)
+
+        if form.is_valid():
+            student = Student.objects.get(pk=request.POST.get('student_id'))
+            student.institute_name = request.POST.get('institute_name')
+            student.student_name = request.POST.get('student_name', )
+            student.gender = request.POST.get('gender', )
+            student.student_class = request.POST.get('student_class', )
+            student.shift = request.POST.get('shift', )
+            student.section = request.POST.get('section', )
+            student.group = request.POST.get('group', )
+            student.id_number = request.POST.get('id_number', )
+            student.class_roll = request.POST.get('class_roll', )
+            student.session = request.POST.get('session', )
+            student.dob = request.POST.get('dob', )
+            student.blood_group = request.POST.get('blood_group', )
+            student.religion = request.POST.get('religion', )
+            student.birth_id_number = request.POST.get('birth_id_number', )
+            student.phone_number = request.POST.get('phone_number', )
+            student.email = request.POST.get('email', )
+            student.old_school_address = request.POST.get('old_school_address', )
+            student.cause_for_leave = request.POST.get('cause_for_leave', )
+            student.house_no = request.POST.get('house_no', )
+            student.house_name = request.POST.get('house_name', )
+            student.road_no = request.POST.get('road_no', )
+            student.village = request.POST.get('village', )
+            student.post = request.POST.get('post', )
+            student.union = request.POST.get('union', )
+            student.upozilla = request.POST.get('upozilla', )
+            student.district = request.POST.get('district', )
+            student.postal_code = request.POST.get('postal_code', )
+            student.permanent_village = request.POST.get('permanent_village', )
+            student.permanent_post = request.POST.get('permanent_post', )
+            student.permanent_union = request.POST.get('permanent_union', )
+            student.permanent_upozilla = request.POST.get('permanent_upozilla', )
+            student.permanent_district = request.POST.get('permanent_district', )
+            student.permanent_postal_code = request.POST.get('permanent_postal_code', )
+            student.student_image = request.FILES.get('student_image', )
+            student.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+
+
 class StudentDeleteView(DeleteView):
-    def get(self, request, pk):
-        student=Student.objects.get(id=pk)
-        student.delete()
-        messages.success(request,'Data delete successful',extra_tags='success')
-        return redirect('students')
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Student.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
 

@@ -4,12 +4,55 @@
     <div class="card-header">
         <h5 class="card-title">Book Update #{{book.id}}</h5>
     </div>
+    <div class="alert alert-danger print-error-msg" style="display:none">
+    <ul></ul>
+</div>
+
     <div class="card-body">
-        <form method="post">
+        <form method="post" id="friend-form" class="group_form"  enctype="multipart/form-data" novalidate>
             {% csrf_token %}
             {{form.as_p}}
+            <input type="hidden" name="student_id" id="student_id" value="{{ object.id }}">
             <button type="submit" class="btn btn-success">Update</button>
         </form>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $('#friend-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/update_student/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                   alert('Student Updated successfully')
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+           function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                $(".print-error-msg").find("ul").append('<li>'+key+' - '+value+'</li>');
+                return false;
+              }
+            });
+        }
+
+    });
+    // end
+
+</script>
 {% endblock %}

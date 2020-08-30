@@ -35,6 +35,11 @@ class AddInstituteForm(forms.ModelForm):
             self.fields['principle_signature'].widget.attrs.update({'class': ''})
             self.fields['institute_logo'].widget.attrs['onchange'] = 'upload_img(this)'
             self.fields['principle_signature'].widget.attrs['onchange'] = 'prin_sig(this)'
+            self.fields['country'].widget.attrs['onFocus'] = 'geolocate()'
+            self.fields['address_1'].widget.attrs['id'] = 'country'
+            self.fields['city'].widget.attrs['id'] = 'locality'
+            self.fields['state'].widget.attrs['id'] = 'administrative_area_level_1'
+            self.fields['zip'].widget.attrs['id'] = 'postal_code'
 
     class Meta:
         model = Institute

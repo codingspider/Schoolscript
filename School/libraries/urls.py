@@ -58,7 +58,7 @@ urlpatterns = [
 
     #book_issue
     path('book_issue_list/', views.book_issue, name="book_issue.list"),
-    path('book_return_list', views.book_return, name="book_return.list"),
+    path('book_return_list', views.book_return, name="book_return_list"),
     path('book_issue_view/<int:pk>', views.book_issue_view, name="book_issue_view"),
     path('book_issue_create/<int:pk>', views.book_issue_create, name="book_issue_create"),
     path('book_issue_edit/<int:pk>/<int:book>', views.BookIssueEditView.as_view(), name="book_issue_edit"),

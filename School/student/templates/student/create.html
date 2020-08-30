@@ -2,13 +2,9 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+<div class="alert alert-danger print-error-msg" style="display:none">
+    <ul></ul>
+</div>
 <form class="form-group" id="friend-form" method="post" enctype="multipart/form-data" novalidate>
     <div class="row">
         {% csrf_token %}
@@ -19,7 +15,6 @@
             {{ field }}
         </div>
         {% endfor %}
-        <input type="submit" class="btn btn-primary" value="Update Institute"/>
     </div>
     <button type="submit" class="btn btn-success">Save Institute</button>
 </form>
@@ -28,7 +23,7 @@
         <img id="img_id" style="width:100px; height:100px; " src="" alt="your image"/>
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
         function upload_img(input) {
             if (input.files && input.files[0]) {
@@ -57,7 +52,7 @@
             data: formData,
             success: function (data) {
                 if($.isEmptyObject(data.error)){
-                   alert('Institute Add successfully')
+                   alert('Student Added successfully')
                     }else{
                         console.log(data.error)
                         printErrorMsg(data.error);

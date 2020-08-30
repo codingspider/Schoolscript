@@ -5,8 +5,10 @@
     <title>Title</title>
 </head>
 <body>
+{{ data }}
 {% for author in data %}
-   <li> {{ author.name }}</li>
+   <h5>ID: {{ author.id }} --- name: {{ author.name }} -- file size: {{ author.size }} -- file type: .{{ author.file_type }}</h5>
+
 {% endfor %}
 
 </body>
