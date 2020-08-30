@@ -1,7 +1,7 @@
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from django.views.generic import View, CreateView
+from django.views.generic import View, CreateView, DeleteView
 from django.urls import reverse, reverse_lazy
 from ..models import News
 from ..form import NewsForm
@@ -39,9 +39,9 @@ class AddNewsView(CreateView):
 
 class DetailNewsView(View):
     def get(self, request, pk):
-        news=News.objects.get(id=pk)
-        date=formats.date_format(datetime.datetime.now().date(),'Y-m-d')
-        context={'news':news,'date':date}
+        news= News.objects.get(id=pk)
+        date= formats.date_format(datetime.datetime.now().date(),'Y-m-d')
+        context= {'news':news,'date':date}
         return render(request, 'news/detail.html',context)
 
 class EditNewsView(View):
@@ -59,12 +59,14 @@ class EditNewsView(View):
             return redirect(reverse('announcement:news'))
     
 
-class DeleteNewsView(View):
-    def get(self,request,pk):
-        news=News.objects.get(id=pk)
-        news.delete()
-        messages.success(request,'Data delete successfull',extra_tags='success')
-        return redirect(reverse('announcement:news'))
+class NewsDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        News.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 class ApprovNewsView(View):
     def get(self,request,pk):

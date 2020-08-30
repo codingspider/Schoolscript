@@ -8,6 +8,7 @@
 		<h1>News
 			<a class="btn btn-primary  float-right" href="{% url 'announcement:add_news' %}"> + Add News</a></h1>
 		</div>
+		     <p class="form_msg text-center">
 		<div class="card card-body"> 
 			<table class="table table-sm">
 				<tr>
@@ -58,7 +59,7 @@
 						
 						<a href="{% url 'announcement:news' row.id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>
 						<a href="{% url 'announcement:edit_news' row.id %}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-						<a onclick='return confirm("Are you sure you want to do this?")' href="{% url 'announcement:delete_news' row.id %}" class="btn btn-danger"><i class="fa fa-trash"></i></a></td>
+						<button class="btn btn-danger" onClick="deleteUser({{row.id}})"><i class="fa fa-trash"></i></button></td>
 					</tr>
 				{% endfor %}
 
@@ -67,5 +68,29 @@
 	</div>
 
 </div>
-  
+   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+function deleteUser(id) {
+  var action = confirm("Are you sure you want to delete this Data?");
+  if (action != false) {
+    $.ajax({
+        url: '/delete_news/',
+        data: {
+            'id': id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.deleted) {
+             printSuccess('Data has been deleted!!');
+            }
+        }
+    });
+    function printSuccess(msg) {
+            $(".form_msg").html('');
+            $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
+            $(".form_msg").append('<p>'+msg+'</p>');
+        }
+  }
+}
+</script>
 {% endblock  %}

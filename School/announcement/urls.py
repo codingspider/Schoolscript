@@ -15,7 +15,7 @@ urlpatterns = [
     path('news/<int:pk>',news.DetailNewsView.as_view(), name="news"),
     path('add_news/',news.AddNewsView.as_view(), name="add_news"),
     path('edit_news/<int:pk>',news.EditNewsView.as_view(), name="edit_news"),
-    path('delete_news/<int:pk>',news.DeleteNewsView.as_view(), name="delete_news"),
+    path('delete_news/', news.NewsDeleteView.as_view(), name="delete_news"),
     
     #news
     path('holidays/', holiday.HolidayView.as_view(), name="holidays"),
