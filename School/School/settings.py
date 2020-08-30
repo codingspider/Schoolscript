@@ -51,7 +51,11 @@ INSTALLED_APPS = [
     'ajax',
     'teste.apps.TesteConfig',
     'modelmanager',
-    'libraries'
+    'libraries',
+    'announcement',
+    'leave',
+    'frontoffice',
+    'transports'
     
 ]
 DATETIME_FORMAT = '%Y-%m-%d %I:%M %p'

@@ -18,7 +18,11 @@ urlpatterns = [
     url(r'^join/', JoinFormView.as_view()),
     url('teste/', include('teste.urls')),
     url('', include('modelmanager.urls')),
-    url('', include('libraries.urls'))
+    url('', include('libraries.urls')),
+    url('', include('announcement.urls')),
+    url('leave/', include('leave.urls')),
+    url('', include('frontoffice.urls')),
+    url('', include('transports.urls')),
 
 
 ]

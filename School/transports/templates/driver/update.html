@@ -1,0 +1,115 @@
+{%  extends 'institute/base.html' %}
+
+{% block content %}
+		<br>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card card-body">
+					<h5>Driver</h5>
+				</div>
+				<div class="card card-body">
+					<div class="alert alert-danger print-error-msg" style="display:none">
+						<ul></ul>
+					</div>
+					<form id="friend-form" method="POST" novalidate>
+						{% csrf_token %}
+                        <input type="hidden" name="driver_id" id="driver_id" value="{{ object.id }}">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="exampleInputEmail1">{{form.name.label}}</label>
+									{{form.name}}
+									<span class="text-danger">{{form.errors.name}}</span>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="exampleInputEmail1">{{form.phone.label}}</label>
+									{{form.phone}}
+									<span class="text-danger">{{form.errors.phone}}</span>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="exampleInputEmail1">{{form.age.label}}</label>
+									{{form.age}}
+									<span class="text-danger">{{form.errors.age}}</span>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="exampleInputEmail1">{{form.gender.label}}</label>
+									{{form.gender}}
+									<span class="text-danger">{{form.errors.gender}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+									<label for="exampleInputEmail1">{{form.driving_licence.label}}</label>
+									{{form.driving_licence}}
+									<span class="text-danger">{{form.errors.driving_licence}}</span>
+								</div>
+                                </div>
+								<div class="col-md-6">
+                                    <div class="form-group">
+									<label for="exampleInputEmail1">{{form.driving_licence_validity.label}}</label>
+									{{form.driving_licence_validity}}
+									<span class="text-danger">{{form.errors.driving_licence_validity}}</span>
+								</div>
+                                </div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="exampleInputEmail1">{{form.address.label}}</label>
+									{{form.address}}
+									<span class="text-danger">{{form.errors.address}}</span>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-success">Submit</button>
+					</form>
+				</div>
+			</div>
+			
+		</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $('#friend-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/update_driver/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                   alert('Driver Updated successfully')
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+           function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                $(".print-error-msg").find("ul").append('<li>'+key+' - '+value+'</li>');
+                return false;
+              }
+            });
+        }
+
+    });
+</script>
+{% endblock content %}
