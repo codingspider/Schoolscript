@@ -12,8 +12,9 @@
         <p class="form_msg text-center">
         </p>
         <div class="card card-body">
-            <form id="friend-form" method="POST" enctype="multipart/form-data" novalidate>
+            <form id="holiday-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                <input type="hidden" name="holiday_id" id="holiday_id" value="{{ object.id }}">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -64,12 +65,12 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-    $('#friend-form').submit(function(e){
+    $('#holiday-form').submit(function(e){
         e.preventDefault();
         $form = $(this)
         var formData = new FormData(this);
         $.ajax({
-            url: "/add_holiday/",
+            url: "/update_holiday/",
             type: 'POST',
             data: formData,
             success: function (data) {
