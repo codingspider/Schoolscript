@@ -23,6 +23,7 @@ urlpatterns = [
     url('leave/', include('leave.urls')),
     url('', include('frontoffice.urls')),
     url('', include('transports.urls')),
+    url('', include('staff.urls')),
 
 
 ]

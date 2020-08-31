@@ -1,0 +1,166 @@
+{% extends 'institute/base.html' %}
+{% block content %}
+<p class="form_msg text-center"></p>
+<form class="form-group" id="add-staff_family" method="post">
+    {% csrf_token %}
+    <div class="fw fl">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-center">Family Information</h3>
+            </div>
+            <input type="hidden" name="staff" id="staff" value="{{ pk }}">
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.father_name.label }}</label>
+                {{ form_2.father_name }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.father_occupation.label }}</label>
+                {{ form_2.father_occupation }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.father_monthly_income.label }}</label>
+                {{ form_2.father_monthly_income }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.father_qualification.label }}</label>
+                {{ form_2.father_qualification }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.father_phone.label }}</label>
+                {{ form_2.father_phone }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.father_email.label }}</label>
+                {{ form_2.father_email }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.father_nid.label }}</label>
+                {{ form_2.father_nid }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.father_passport.label }}</label>
+                {{ form_2.father_passport }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.father_nid.label }}</label>
+                {{ form_2.father_license }}
+            </div>
+
+
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.mother_name.label }}</label>
+                {{ form_2.mother_name }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.mother_occupation.label }}</label>
+                {{ form_2.mother_occupation }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.mother_monthly_income.label }}</label>
+                {{ form_2.mother_monthly_income }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.mother_educational_qualification.label }}</label>
+                {{ form_2.mother_educational_qualification }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.mother_phone.label }}</label>
+                {{ form_2.mother_phone }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.mother_email.label }}</label>
+                {{ form_2.mother_email }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.mother_nid.label }}</label>
+                {{ form_2.mother_nid }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.mother_passport.label }}</label>
+                {{ form_2.mother_passport }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.mother_nid.label }}</label>
+                {{ form_2.mother_license }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.spouse_name.label }}</label>
+                {{ form_2.spouse_name }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.spouse_occupation.label }}</label>
+                {{ form_2.spouse_occupation }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.marrige_day.label }}</label>
+                {{ form_2.marrige_day }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.spouse_education.label }}</label>
+                {{ form_2.spouse_education }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form_2.kids.label }}</label>
+                {{ form_2.kids }}
+            </div>
+
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-success pull-right">Save Teacher</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $('#add-staff_family').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/add_family_information/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                    printSuccess('Success');
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+             complete:function(){
+               $('body, html').animate({scrollTop:$('body').offset().top}, 'fast');
+            },
+
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+
+        function printSuccess(msg) {
+            $(".form_msg").html('');
+            $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
+            $(".form_msg").append('<p>'+msg+'</p>');
+            window.setTimeout(function() {
+                    window.location.href = '/professionals';
+                },500);
+
+        }
+           function printErrorMsg (msg) {
+             $(".form_msg").html('');
+             $(".form_msg").removeClass('dn');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                 $(".form_msg").append('<p class="alert-danger">'+key+' - '+value+'</p>');
+                return false;
+              }
+            });
+        }
+    });
+
+
+
+
+</script>
+{% endblock %}

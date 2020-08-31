@@ -8,6 +8,7 @@
     <div class="alert alert-danger print-error-msg" style="display:none">
         <ul></ul>
     </div>
+    <p class="form_msg text-center"></p>
     <div class="card card-body">
         <form id="friend-form" method="POST" novalidate>
             {% csrf_token %}
@@ -29,7 +30,7 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-    $('#friend-form').submit(function(e){
+  $('#friend-form').submit(function(e){
         e.preventDefault();
         $form = $(this)
         var formData = new FormData(this);
@@ -39,28 +40,42 @@
             data: formData,
             success: function (data) {
                 if($.isEmptyObject(data.error)){
-                   alert('Hostel Type Updated successfully')
+                    printSuccess('Success');
                     }else{
                         console.log(data.error)
                         printErrorMsg(data.error);
                     }
              },
+             complete:function(){
+               $('body, html').animate({scrollTop:$('body').offset().top}, 'fast');
+            },
+
             cache: false,
             contentType: false,
             processData: false
 
         });
+
+        function printSuccess(msg) {
+            $(".form_msg").html('');
+            $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
+            $(".form_msg").append('<p>'+msg+'</p>');
+            window.setTimeout(function() {
+                    window.location.href = '/types';
+                },500);
+
+        }
            function printErrorMsg (msg) {
-            $(".print-error-msg").find("ul").html('');
-            $(".print-error-msg").css('display','block');
+             $(".form_msg").html('');
+             $(".form_msg").removeClass('dn');
             $.each( msg, function( key, value ) {
                 if (value) {
-                $(".print-error-msg").find("ul").append('<li>'+key+' - '+value+'</li>');
+                 $(".form_msg").append('<p class="alert-danger">'+key+' - '+value+'</p>');
                 return false;
               }
             });
         }
-
     });
+
 </script>
 {% endblock %}

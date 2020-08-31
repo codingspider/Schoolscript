@@ -16,7 +16,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="holiday_id" id="holiday_id" value="{{ object.id }}">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="exampleInputEmail1">{{ form.title.label }}</label>
                             {{form.title}}
@@ -24,14 +24,14 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="exampleInputEmail1">{{ form.start_date.label }}</label>
                             {{form.start_date}}
                             <span class="text-danger">{{form.errors.start_date}}</span>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="exampleInputEmail1">{{ form.end_date.label }}</label>
                             {{form.end_date}}
@@ -39,7 +39,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="exampleInputEmail1">{{ form.attachment.label }}</label>
                             {{form.attachment}}
@@ -49,7 +49,7 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="exampleInputEmail1">{{ form.description.label }}</label>
                             {{form.description}}

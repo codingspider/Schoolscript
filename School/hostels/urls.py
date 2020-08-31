@@ -29,7 +29,7 @@ urlpatterns = [
 
 
     # room
-    path('rooms/', room.RoomListView.as_view(), name="rooms"),
+    path('rooms/', room.RoomListView.as_view(), name="room_list"),
     path('add_room/', room.AddRoomView.as_view(), name="add-room"),
     path('edit_room/<int:pk>', room.RoomUpdateView.as_view(), name="edit_room"),
     path('update_room/', room.RoomUpdate.as_view(), name="update_room"),

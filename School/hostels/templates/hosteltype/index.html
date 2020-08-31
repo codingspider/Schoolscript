@@ -15,6 +15,7 @@
             <div class="card card-header">
                 <h4>Hostel Type</h4>
             </div>
+            <p class="form_msg"></p>
             <div class="card card-body">
                 <table class="table table-sm">
                     <tr>
@@ -46,7 +47,7 @@
             <ul></ul>
         </div>
             <div class="card card-body">
-                <form id="friend-form" method="POST" novalidate>
+                <form id="hostel-type-form" method="POST" novalidate>
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="exampleInputEmail1">Type</label>
@@ -77,7 +78,8 @@ function deleteUser(id) {
         dataType: 'json',
         success: function (data) {
             if (data.deleted) {
-             alert('Data Deleted Successfully !')
+             $(".form_msg").addClass('alert-success');
+             $(".form_msg").append('<p class="text-success">'+ 'Data has been deleted!' +'</p>');
             }
         }
     });
@@ -87,7 +89,7 @@ function deleteUser(id) {
 </script>
 
 <script type="text/javascript">
-    $('#friend-form').submit(function(e){
+   $('#hostel-type-form').submit(function(e){
         e.preventDefault();
         $form = $(this)
         var formData = new FormData(this);
@@ -97,28 +99,41 @@ function deleteUser(id) {
             data: formData,
             success: function (data) {
                 if($.isEmptyObject(data.error)){
-                   alert('Room Add successfully')
+                    printSuccess('Success');
                     }else{
                         console.log(data.error)
                         printErrorMsg(data.error);
                     }
              },
+             complete:function(){
+               $('body, html').animate({scrollTop:$('body').offset().top}, 'fast');
+            },
+
             cache: false,
             contentType: false,
             processData: false
 
         });
+
+        function printSuccess(msg) {
+            $(".form_msg").html('');
+            $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
+            $(".form_msg").append('<p>'+msg+'</p>');
+            window.setTimeout(function() {
+                    window.location.href = '/types';
+                },500);
+
+        }
            function printErrorMsg (msg) {
-            $(".print-error-msg").find("ul").html('');
-            $(".print-error-msg").css('display','block');
+             $(".form_msg").html('');
+             $(".form_msg").removeClass('dn');
             $.each( msg, function( key, value ) {
                 if (value) {
-                $(".print-error-msg").find("ul").append('<li>'+key+' - '+value+'</li>');
+                 $(".form_msg").append('<p class="alert-danger">'+key+' - '+value+'</p>');
                 return false;
               }
             });
         }
-
     });
 
 </script>

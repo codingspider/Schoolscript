@@ -55,7 +55,9 @@ INSTALLED_APPS = [
     'announcement',
     'leave',
     'frontoffice',
-    'transports'
+    'transports',
+    'gallary',
+    'staff',
     
 ]
 DATETIME_FORMAT = '%Y-%m-%d %I:%M %p'

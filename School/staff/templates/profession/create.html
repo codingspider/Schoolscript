@@ -1,0 +1,295 @@
+{% extends 'institute/base.html' %}
+{% block content %}
+
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+<div class="alert alert-danger print-error-msg" style="display:none">
+    <ul></ul>
+</div>
+<p class="form_msg text-center"></p>
+<form class="form-group" id="add-staff" method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <div class="fw fl">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-center">Professional Information</h3>
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.first_name.label }}</label>
+                {{ form.first_name }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.last_name.label }}</label>
+                {{ form.last_name }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.gender.label }}</label>
+                {{ form.gender }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.designation.label }}</label>
+                {{ form.designation }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.work_type.label }}</label>
+                {{ form.work_type }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.monthly_salary.label }}</label>
+                {{ form.monthly_salary }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.special_for.label }}</label>
+                {{ form.special_for }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.educational_qualification.label }}</label>
+                {{ form.educational_qualification }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.special_training.label }}</label>
+                {{ form.special_training }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.joining_date.label }}</label>
+                {{ form.joining_date }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.retirement_date.label }}</label>
+                {{ form.retirement_date }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.index_number.label }}</label>
+                {{ form.index_number }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.mpo_date.label }}</label>
+                {{ form.mpo_date }}
+            </div>
+
+            <div class="col-md-6 mb15">
+                <label>{{ form.staff_id_no.label }}</label>
+                {{ form.staff_id_no }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.staff_access.label }}</label>
+                {{ form.staff_access }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.teacher_email.label }}</label>
+                {{ form.teacher_email }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.teacher_password.label }}</label>
+                {{ form.teacher_password }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.teacher_phone.label }}</label>
+                {{ form.teacher_phone }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.birth_date.label }}</label>
+                {{ form.birth_date }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.blood_group.label }}</label>
+                {{ form.blood_group }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.religion.label }}</label>
+                {{ form.religion }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.passport.label }}</label>
+                {{ form.passport }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.nid.label }}</label>
+                {{ form.nid }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.last_organizing.label }}</label>
+                {{ form.last_organizing }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.cause_of_leave.label }}</label>
+                {{ form.cause_of_leave }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.institute_address.label }}</label>
+                {{ form.institute_address }}
+            </div>
+
+            <div class="col-md-12">
+                <h3 class="text-center">Address Information</h3>
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.house_number.label }}</label>
+                {{ form.house_number }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.road_number.label }}</label>
+                {{ form.road_number }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.village.label }}</label>
+                {{ form.village }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.post_office.label }}</label>
+                {{ form.post_office }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.union_name.label }}</label>
+                {{ form.union_name }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.thana.label }}</label>
+                {{ form.thana }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.district.label }}</label>
+                {{ form.district }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.post_code.label }}</label>
+                {{ form.post_code }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.is_permanent.label }}</label>
+                {{ form.is_permanent }}
+            </div>
+            <div class="col-md-6 mb15">
+                <label>{{ form.status.label }}</label>
+                {{ form.status }}
+            </div>
+
+            <div class="form-group" id="otherFieldGroupDiv">
+                <div class="row">
+                    <div class="col-md-6 mb15">
+                        <label>{{ form.per_house_number.label }}</label>
+                        {{ form.per_house_number }}
+                    </div>
+                    <div class="col-md-6 mb15">
+                        <label>{{ form.per_road_number.label }}</label>
+                        {{ form.per_road_number }}
+                    </div>
+                    <div class="col-md-6 mb15">
+                        <label>{{ form.per_village.label }}</label>
+                        {{ form.per_village }}
+                    </div>
+                    <div class="col-md-6 mb15">
+                        <label>{{ form.per_post_office.label }}</label>
+                        {{ form.per_post_office }}
+                    </div>
+                    <div class="col-md-6 mb15">
+                        <label>{{ form.per_union_name.label }}</label>
+                        {{ form.per_union_name }}
+                    </div>
+                    <div class="col-md-6 mb15">
+                        <label>{{ form.per_thana.label }}</label>
+                        {{ form.per_thana }}
+                    </div>
+                    <div class="col-md-6 mb15">
+                        <label>{{ form.per_district.label }}</label>
+                        {{ form.per_district }}
+                    </div>
+                    <div class="col-md-6 mb15">
+                        <label>{{ form.per_post_code.label }}</label>
+                        {{ form.per_post_code }}
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-6 mb15 mt15">
+                        <input type="file" name="image" class="imginput dn" id="image">
+
+                    </div>
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success pull-right">Save and Continue</button>
+                    </div>
+        </div>
+    </div>
+    </div>
+
+</form>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $('#add-staff').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/add_professionals/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+
+                if($.isEmptyObject(data.error)){
+                    var id = data['instance']
+                    printSuccess('Success', id);
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+             complete:function(){
+               $('body, html').animate({scrollTop:$('body').offset().top}, 'fast');
+            },
+
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+
+        function printSuccess(msg, id) {
+            $(".form_msg").html('');
+            $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
+            $(".form_msg").append('<p>'+msg+'</p>');
+            window.setTimeout(function() {
+                    window.location.href = '/professionals_add_parent/' + id;
+                },500);
+
+        }
+           function printErrorMsg (msg) {
+             $(".form_msg").html('');
+             $(".form_msg").removeClass('dn');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                 $(".form_msg").append('<p class="alert-danger">'+key+' - '+value+'</p>');
+                return false;
+              }
+            });
+        }
+    });
+
+
+
+
+</script>
+<script>
+$("#id_is_permanent").change(function() {
+  if ($(this).val() == "false") {
+    $('#otherFieldGroupDiv').show();
+  } else {
+    $('#otherFieldGroupDiv').hide();
+  }
+});
+$("#seeAnotherFieldGroup").trigger("change");
+
+</script>
+{% endblock %}

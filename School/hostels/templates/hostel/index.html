@@ -16,6 +16,7 @@
 <div class="row">
 	<div class="col-md-8 offset-md-2">
 		<hr>
+		<p class="form_msg text-center"> </p>
 		<div class="card card-header">
 		<h1>Hostel
 			<a class="btn btn-primary  float-right" href="{% url 'add_hostel' %}"> + Create Hostel</a></h1>
@@ -61,7 +62,8 @@ function deleteUser(id) {
         dataType: 'json',
         success: function (data) {
             if (data.deleted) {
-             alert('Data Deleted Successfully !')
+             $(".form_msg").append('<p class="text-success">'+ 'Data has been deleted!' +'</p>');
+
             }else{
             	alert('Something went wrong')
             }
