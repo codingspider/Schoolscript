@@ -215,16 +215,14 @@
                 </div>
             </div>
             <div class="col-md-6 mb15 mt15">
-                        <input type="file" name="image" class="imginput dn" id="image">
+                <input type="file" name="image" class="imginput dn" id="image">
 
-                    </div>
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-success pull-right">Save and Continue</button>
-                    </div>
+            </div>
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-success pull-right">Save and Continue</button>
+            </div>
         </div>
     </div>
-    </div>
-
 </form>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
@@ -276,10 +274,6 @@
             });
         }
     });
-
-
-
-
 </script>
 <script>
 $("#id_is_permanent").change(function() {
@@ -290,6 +284,7 @@ $("#id_is_permanent").change(function() {
   }
 });
 $("#seeAnotherFieldGroup").trigger("change");
+
 
 </script>
 {% endblock %}

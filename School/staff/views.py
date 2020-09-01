@@ -1,3 +1,5 @@
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
 from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -5,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DeleteView, UpdateView
 from .models import Professionals, FamilyInformation
-from .forms import ProfessionalForm, FamilyInformationForm
+from .forms import ProfessionalForm, FamilyInformationForm, ProfessionalEditForm
 
 
 class StaffListView(ListView):
@@ -27,6 +29,15 @@ class StaffAddView(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
+
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            teacher_email = form.cleaned_data['teacher_email']
+            teacher_password = make_password(form.cleaned_data['teacher_password'])
+            new_user = User(email=teacher_email, password=teacher_password, first_name=first_name,
+                            last_name=last_name)
+
+            new_user.save()
             instance = form.save()
             ser_instance = instance.id
 
@@ -72,12 +83,12 @@ class EditStaffInformation(UpdateView):
     model = Professionals
     template_name = 'profession/update.html'
     context_object_name = 'profession'
-    form_class = ProfessionalForm
+    form_class = ProfessionalEditForm
     success_url = reverse_lazy('professionals-list')
 
 
 class UpdateStaffInformationView(View):
-    form_class = ProfessionalForm
+    form_class = ProfessionalEditForm
 
     def post(self, request):
         form = self.form_class(request.POST, request.FILES)
@@ -99,8 +110,6 @@ class UpdateStaffInformationView(View):
             staff.mpo_date = request.POST.get('mpo_date', )
             staff.staff_id_no = request.POST.get('staff_id_no', )
             staff.id_staff_access = request.POST.get('staff_access', )
-            staff.teacher_email = request.POST.get('teacher_email', )
-            staff.teacher_password = request.POST.get('teacher_password', )
             staff.teacher_phone = request.POST.get('teacher_phone', )
             staff.birth_date = request.POST.get('birth_date', )
             staff.blood_group = request.POST.get('blood_group', )

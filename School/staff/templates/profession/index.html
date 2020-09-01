@@ -13,8 +13,9 @@
 				<tr>
 					<th>Serial</th>
 					<th>Name</th>
-					<th>Address</th>
-					<th>Type</th>
+					<th>Designation</th>
+					<th>Access</th>
+					<th>Specialized</th>
 					<th>Action</th>
 				</tr>
 				{% for row in profession  %}
@@ -22,7 +23,8 @@
 						<td>{{forloop.counter}}</td>
 						<td>{{row.first_name}} {{row.last_name}}</td>
 						<td>{{row.designation}}</td>
-						<td>{{row.work_type}}</td>
+						<td>{{ row.staff_access}}</td>
+						<td>{{row.special_for}}</td>
 						<td>
 						<a href="/edit_staff_information/{{ row.id }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
 						<button class="btn btn-danger" onClick="deleteUser({{row.id}})"><i class="fa fa-trash"></i></button>

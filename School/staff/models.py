@@ -48,7 +48,7 @@ class Professionals(models.Model):
     thana = models.CharField(max_length=100, null=True, blank=True)
     district = models.CharField(max_length=100, null=True, blank=True)
     post_code = models.CharField(max_length=100, null=True, blank=True)
-    is_permanent = models.BooleanField(default=False, null=True, blank=True)
+    is_permanent = models.BooleanField(default=True, null=True, blank=True)
 
     per_house_number = models.CharField(max_length=100, null=True, blank=True)
     per_road_number = models.CharField(max_length=100, null=True, blank=True)

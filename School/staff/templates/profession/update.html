@@ -89,14 +89,7 @@
                 <label>{{ form.staff_access.label }}</label>
                 {{ form.staff_access }}
             </div>
-            <div class="col-md-6 mb15">
-                <label>{{ form.teacher_email.label }}</label>
-                {{ form.teacher_email }}
-            </div>
-            <div class="col-md-6 mb15">
-                <label>{{ form.teacher_password.label }}</label>
-                {{ form.teacher_password }}
-            </div>
+
             <div class="col-md-6 mb15">
                 <label>{{ form.teacher_phone.label }}</label>
                 {{ form.teacher_phone }}
@@ -220,7 +213,7 @@
 
                     </div>
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success pull-right">Save and Continue</button>
+                        <button type="submit" class="btn btn-success pull-right">Update</button>
                     </div>
         </div>
     </div>
@@ -280,10 +273,11 @@
 </script>
 <script>
 $("#id_is_permanent").change(function() {
-  if ($(this).val() == "false") {
-    $('#otherFieldGroupDiv').show();
-  } else {
+  if ($(this).val() == "true") {
     $('#otherFieldGroupDiv').hide();
+  } else {
+
+    $('#otherFieldGroupDiv').show();
   }
 });
 $("#seeAnotherFieldGroup").trigger("change");
