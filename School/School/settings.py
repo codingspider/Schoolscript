@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'transports',
     'gallary',
     'staff',
+    'subject'
     
 ]
 DATETIME_FORMAT = '%Y-%m-%d %I:%M %p'

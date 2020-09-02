@@ -29,18 +29,8 @@ class StaffAddView(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            teacher_email = form.cleaned_data['teacher_email']
-            teacher_password = make_password(form.cleaned_data['teacher_password'])
-            new_user = User(email=teacher_email, password=teacher_password, first_name=first_name,
-                            last_name=last_name)
-
-            new_user.save()
             instance = form.save()
             ser_instance = instance.id
-
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
             return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
@@ -70,6 +60,7 @@ class AddFamilyInformationView(View):
 
 
 class DeleteStaffView(DeleteView):
+
     def get(self, request):
         id1 = request.GET.get('id', None)
         Professionals.objects.get(id=id1).delete()
@@ -139,6 +130,8 @@ class UpdateStaffInformationView(View):
             staff.per_post_code = request.POST.get('per_post_code')
             staff.image = request.FILES.get('image')
             staff.save()
-            return JsonResponse({"instance": 'messages'}, status=200)
+            instance_id = request.POST.get('staff_id')
+            return JsonResponse({"instance": instance_id}, status=200)
         else:
             return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+

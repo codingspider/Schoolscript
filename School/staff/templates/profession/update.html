@@ -205,20 +205,17 @@
                         <label>{{ form.per_post_code.label }}</label>
                         {{ form.per_post_code }}
                     </div>
-
                 </div>
             </div>
             <div class="col-md-6 mb15 mt15">
-                        <input type="file" name="image" class="imginput dn" id="image">
-
-                    </div>
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-success pull-right">Update</button>
-                    </div>
+                <input type="file" name="image" class="imginput dn" id="image">
+            </div>
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-success pull-right">Update and continue</button>
+            </div>
         </div>
     </div>
     </div>
-
 </form>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
@@ -254,10 +251,9 @@
             $(".form_msg").html('');
             $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
             $(".form_msg").append('<p>'+msg+'</p>');
-<!--            window.setTimeout(function() {-->
-<!--                    window.location.href = '/professionals_add_parent/' + id;-->
-<!--                },500);-->
-
+            window.setTimeout(function() {
+                    window.location.href = '/professionals';
+               },500);
         }
            function printErrorMsg (msg) {
              $(".form_msg").html('');
@@ -270,17 +266,16 @@
             });
         }
     });
+
 </script>
 <script>
 $("#id_is_permanent").change(function() {
   if ($(this).val() == "true") {
     $('#otherFieldGroupDiv').hide();
   } else {
-
     $('#otherFieldGroupDiv').show();
   }
 });
 $("#seeAnotherFieldGroup").trigger("change");
-
 </script>
 {% endblock %}

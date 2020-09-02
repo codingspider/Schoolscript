@@ -53,5 +53,8 @@ class Teacher(models.Model):
 
     image = models.ImageField(null=True, blank=True, upload_to='uploads/')
 
+    def __str__(self):
+        return self.full_name
+
 
 

@@ -24,6 +24,7 @@ urlpatterns = [
     url('', include('frontoffice.urls')),
     url('', include('transports.urls')),
     url('', include('staff.urls')),
+    url('', include('subject.urls')),
 
 
 ]

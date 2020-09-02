@@ -4,10 +4,11 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">Serial</th>
-      <th scope="col">Father name </th>
-      <th scope="col">Mother Name </th>
-      <th scope="col">Action</th>
+      <th>Serial</th>
+      <th>Father name </th>
+      <th>Mother Name </th>
+      <th>Spouse Name </th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
@@ -16,6 +17,7 @@
       <th>{{forloop.counter}}</th>
       <td>{{ parent.father_name}}</td>
       <td>{{ parent.mother_name}}</td>
+      <td>{{ parent.spouse_name}}</td>
       <td>
           <a href="detail_parent/{{ parent.id }}" class="btn btn-warning">View</a>
           <a href="edit_parent/{{ parent.id }}" type="button" class="btn btn-info">Edit</a>

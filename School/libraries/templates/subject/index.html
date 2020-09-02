@@ -16,16 +16,24 @@
 				<tr>
 					<th>Serial</th>
 					<th>Name</th>
-					<th>Description</th>
+					<th>Subject class</th>
+					<th>Teacher</th>
+					<th>Type</th>
+					<th>Subject code</th>
+					<th>Author</th>
 					<th>Action</th>
 				</tr>
 				{% for row in subjects  %}
 					<tr>
 						<td>{{forloop.counter}}</td>
 						<td>{{row.name}}</td>
-						<td>{{row.description}}</td>
-						<td><a href="/edit_subject/{{row.id}}" class="btn btn-info">Edit</a>
-						<button onClick="deleteUser({{row.id}})" class="btn btn-danger">Delete</button></td>
+						<td>{{row.subject_class}}</td>
+						<td>{{row.teacher}}</td>
+						<td>{{row.type}}</td>
+						<td>{{row.subject_code}}</td>
+						<td>{{row.author}}</td>
+						<td><a href="/edit_subject/{{row.id}}" class="btn btn-info"><i class="fa fa-pencil"></i></a>
+						<button onClick="deleteUser({{row.id}})" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
 					</tr>
 				{% endfor %}
 

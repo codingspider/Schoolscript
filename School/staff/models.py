@@ -14,7 +14,7 @@ class Group(models.Model):
 class Professionals(models.Model):
     first_name = models.CharField(max_length=255, null=True, blank=True)
     last_name = models.CharField(max_length=255, null=True, blank=True)
-    gender = models.CharField(max_length=5, choices=gender_status)
+    gender = models.CharField(max_length=5, choices=gender_status, null=True)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     work_type = models.CharField(max_length=5, choices=work_type)
     monthly_salary = models.FloatField(null=True, blank=True)
@@ -38,7 +38,7 @@ class Professionals(models.Model):
     last_organizing = models.CharField(max_length=255, null=True, blank=True)
     cause_of_leave = models.CharField(max_length=255, null=True, blank=True)
     institute_address = models.CharField(max_length=255, null=True, blank=True)
-    status = models.CharField(max_length=5, choices=choice_status)
+    status = models.CharField(max_length=5, choices=choice_status, null=True)
 
     house_number = models.CharField(max_length=100, null=True, blank=True)
     road_number = models.CharField(max_length=100, null=True, blank=True)
@@ -86,10 +86,10 @@ class FamilyInformation(models.Model):
     mother_nid = models.IntegerField(null=True, blank=True)
     mother_passport = models.CharField(max_length=255, null=True, blank=True)
     mother_license = models.CharField(max_length=255, null=True, blank=True)
-    nid = models.IntegerField(max_length=255, null=True, blank=True)
+    nid = models.IntegerField(null=True, blank=True)
     spouse_name = models.CharField(max_length=255, null=True, blank=True)
     spouse_occupation = models.CharField(max_length=255, null=True, blank=True)
-    marrige_day = models.DateField(null=True, blank=True)
+    marrige_day = models.CharField(max_length=255, null=True, blank=True)
     spouse_education = models.CharField(max_length=255, null=True, blank=True)
     kids = models.TextField(null=True, blank=True)
 

@@ -1,5 +1,10 @@
 {% extends 'institute/base.html' %}
 {% block content %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
 <p class="form_msg text-center"></p>
 <form class="form-group" id="add-staff_family" method="post">
     {% csrf_token %}
@@ -8,100 +13,100 @@
             <div class="col-md-12">
                 <h3 class="text-center">Family Information</h3>
             </div>
-            <input type="hidden" name="staff" id="staff" value="{{ pk }}">
+            <input type="text" name="family_id" id="family_id" value="{{ pk}}">
             <div class="col-md-6 mb15">
-                <label>{{ form_2.father_name.label }}</label>
-                {{ form_2.father_name }}
+                <label>Father Name </label>
+                <input type="text" name="father_name" class="form-control" value="{{ data.father_name }}">
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.father_occupation.label }}</label>
-                {{ form_2.father_occupation }}
+                <label>{{ form.father_occupation.label }}</label>
+                {{ form.father_occupation }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.father_monthly_income.label }}</label>
-                {{ form_2.father_monthly_income }}
+                <label>{{ form.father_monthly_income.label }}</label>
+                {{ form.father_monthly_income }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.father_qualification.label }}</label>
-                {{ form_2.father_qualification }}
+                <label>{{ form.father_qualification.label }}</label>
+                {{ form.father_qualification }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.father_phone.label }}</label>
-                {{ form_2.father_phone }}
+                <label>{{ form.father_phone.label }}</label>
+                {{ form.father_phone }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.father_email.label }}</label>
-                {{ form_2.father_email }}
+                <label>{{ form.father_email.label }}</label>
+                {{ form.father_email }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.father_nid.label }}</label>
-                {{ form_2.father_nid }}
+                <label>{{ form.father_nid.label }}</label>
+                {{ form.father_nid }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.father_passport.label }}</label>
-                {{ form_2.father_passport }}
+                <label>{{ form.father_passport.label }}</label>
+                {{ form.father_passport }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.father_nid.label }}</label>
-                {{ form_2.father_license }}
+                <label>{{ form.father_nid.label }}</label>
+                {{ form.father_license }}
             </div>
 
 
             <div class="col-md-6 mb15">
-                <label>{{ form_2.mother_name.label }}</label>
-                {{ form_2.mother_name }}
+                <label>{{ form.mother_name.label }}</label>
+                {{ form.mother_name }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.mother_occupation.label }}</label>
-                {{ form_2.mother_occupation }}
+                <label>{{ form.mother_occupation.label }}</label>
+                {{ form.mother_occupation }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.mother_monthly_income.label }}</label>
-                {{ form_2.mother_monthly_income }}
+                <label>{{ form.mother_monthly_income.label }}</label>
+                {{ form.mother_monthly_income }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.mother_educational_qualification.label }}</label>
-                {{ form_2.mother_educational_qualification }}
+                <label>{{ form.mother_educational_qualification.label }}</label>
+                {{ form.mother_educational_qualification }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.mother_phone.label }}</label>
-                {{ form_2.mother_phone }}
+                <label>{{ form.mother_phone.label }}</label>
+                {{ form.mother_phone }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.mother_email.label }}</label>
-                {{ form_2.mother_email }}
+                <label>{{ form.mother_email.label }}</label>
+                {{ form.mother_email }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.mother_nid.label }}</label>
-                {{ form_2.mother_nid }}
+                <label>{{ form.mother_nid.label }}</label>
+                {{ form.mother_nid }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.mother_passport.label }}</label>
-                {{ form_2.mother_passport }}
+                <label>{{ form.mother_passport.label }}</label>
+                {{ form.mother_passport }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.mother_nid.label }}</label>
-                {{ form_2.mother_license }}
+                <label>{{ form.mother_nid.label }}</label>
+                {{ form.mother_license }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.spouse_name.label }}</label>
-                {{ form_2.spouse_name }}
+                <label>{{ form.spouse_name.label }}</label>
+                {{ form.spouse_name }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.spouse_occupation.label }}</label>
-                {{ form_2.spouse_occupation }}
+                <label>{{ form.spouse_occupation.label }}</label>
+                {{ form.spouse_occupation }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.marrige_day.label }}</label>
-                {{ form_2.marrige_day }}
+                <label>{{ form.marrige_day.label }}</label>
+                {{ form.marrige_day }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.spouse_education.label }}</label>
-                {{ form_2.spouse_education }}
+                <label>{{ form.spouse_education.label }}</label>
+                {{ form.spouse_education }}
             </div>
             <div class="col-md-6 mb15">
-                <label>{{ form_2.kids.label }}</label>
-                {{ form_2.kids }}
+                <label>{{ form.kids.label }}</label>
+                {{ form.kids }}
             </div>
 
             <div class="col-md-12">
