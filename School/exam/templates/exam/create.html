@@ -1,0 +1,119 @@
+{%  extends 'institute/base.html' %}
+
+{% block content %}
+<br>
+<div class="alert alert-danger print-error-msg" style="display:none">
+    <ul></ul>
+</div>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card card-body">
+            <h5>Exam</h5>
+        </div>
+        <p class="form_msg text-center"></p>
+        <div class="card card-body">
+            <form id="room-form" method="POST" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.exam_type.label}}</label>
+                    {{form.exam_type}}
+                    <span class="text-danger">{{form.errors.exam_type}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.exaam_class.label}}</label>
+                    {{form.exaam_class}}
+                    <span class="text-danger">{{form.errors.exaam_class}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.section.label}}</label>
+                    {{form.section}}
+                    <span class="text-danger">{{form.errors.section}}</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.subject.label }}</label>
+                    {{form.subject}}
+                    <span class="text-danger">{{form.errors.subject}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.exam_date.label}}</label>
+                    {{form.exam_date}}
+                    <span class="text-danger">{{form.errors.exam_date}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.start_time.label }}</label>
+                    {{form.start_time}}
+                    <span class="text-danger">{{form.errors.start_time}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.end_time.label }}</label>
+                    {{form.end_time}}
+                    <span class="text-danger">{{form.errors.end_time}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.room_no.label }}</label>
+                    {{form.room_no}}
+                    <span class="text-danger">{{form.errors.room_no}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.description.label }}</label>
+                    {{form.description}}
+                    <span class="text-danger">{{form.errors.description}}</span>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $('#room-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/add_exam/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+                    printSuccess('Success');
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+             complete:function(){
+               $('body, html').animate({scrollTop:$('body').offset().top}, 'fast');
+            },
+
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+
+        function printSuccess(msg) {
+            $(".form_msg").html('');
+            $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
+            $(".form_msg").append('<p>'+msg+'</p>');
+            window.setTimeout(function() {
+                    window.location.href = '/exam-list-view/';
+                },500);
+
+        }
+           function printErrorMsg (msg) {
+             $(".form_msg").html('');
+             $(".form_msg").removeClass('dn');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                 $(".form_msg").append('<p class="alert-danger">'+key+' - '+value+'</p>');
+                return false;
+              }
+            });
+        }
+    });
+
+</script>
+{% endblock content %}

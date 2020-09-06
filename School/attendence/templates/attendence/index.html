@@ -1,0 +1,173 @@
+{% extends 'institute/base.html' %}
+{% block content %}
+<div class="container">
+    <form action="/get_student_list_for_attendance/" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Class</label>
+                    </div>
+                    <select class="custom-select" name="class_id" required>
+                        <option selected>Choose...</option>
+                        {% for cla in classes %}
+                        <option value="{{ cla.id }}">{{ cla.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Section</label>
+                    </div>
+                    <select class="custom-select" name="section_id" required>
+                        <option selected>Choose...</option>
+                        {% for sec in section %}
+                        <option value="{{ sec.id }}">{{ sec.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Group</label>
+                    </div>
+                    <select class="custom-select" name="group_id" required>
+                        <option selected>Choose...</option>
+                        {% for gro in groups %}
+                        <option value="{{ gro.id }}">{{ gro.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Shift</label>
+                    </div>
+                    <select class="custom-select" name="shift_id" required>
+                        <option selected>Choose...</option>
+                        {% for shif in shifts %}
+                        <option value="{{ shif.id }}">{{ shif.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Subject</label>
+                    </div>
+                    <select class="custom-select" name="subject_id" required>
+                        <option selected>Choose...</option>
+                        {% for sub in subjects %}
+                        <option value="{{ sub.id }}">{{ sub.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Date</label>
+                        <input class="form-control" type="date" name="date" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-info pull-right">Find Match</button>
+            </div>
+        </div>
+    </form>
+</div>
+<br>
+{% if students %}
+<div class="container">
+    <h2>Attendence Table</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Serial No</th>
+            <th>Photo</th>
+            <th>Student Name</th>
+            <th>Roll</th>
+            <th>Email</th>
+            <th>Attendance</th>
+        </tr>
+        </thead>
+        <tbody id="list">
+        {% for data in students %}
+        <tr>
+            <td>{{ forloop.counter}}</td>
+            <td data-title="Photo"><img style="width:100px; height:100px;" src="{{ data.student_image.url }}" alt=""></td>
+            <td data-title="Name">{{ data.student_name}}</td>
+            <td data-title="Roll">{{ data.class_roll}}</td>
+            <td data-title="Email">{{ data.email}}</td>
+            <td class="studentID" data-studentid="{{ data.id }}" data-title="Attendance">
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" id="" value="P"  checked>Present
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" id="" value="LE"> Late Present With Excuse
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" id="" value="L">Late Present
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" id="" value="A">Absent
+                </label>
+
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+            <span style="margin-top: 20px;" class="btn btn-success pull-right save_attendance">Submit</span>
+
+</div>
+{% endif %}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+$('.save_attendance').click(function(){
+     var attendance = {};
+      $('.attendance').each(function(i){
+          var name = $(this).attr('name');
+          if($("input:radio[name="+name+"]").is(":checked")) {
+              var val = $('input:radio[name='+name+']:checked').val();
+          } else {
+              var val = '';
+          }
+          attendance[name] = val;
+      });
+
+      var day = "{{ date }}";
+      var classes = "{{ class_id }}";
+      var section = "{{ section_id }}";
+      var group = "{{group_id}}";
+      var subjectID = "{{subject_id}}";
+
+      if(parseInt(classes) && parseInt(day)) {
+          $.ajax({
+              type: 'POST',
+              url: "/attendance_save_attendance/",
+              data: {"day" : day, "classes" : classes, "section" : section, "subject" : subjectID , "group" : group , "attendance" : attendance },
+              dataType: "html",
+              success: function (data) {
+                if($.isEmptyObject(data.error)){
+                    alert('ok')
+                    }else{
+                        console.log(data.error)
+                        alert('failed')
+                    }
+             }
+          });
+      }
+  });
+
+
+</script>
+{% endblock content %}

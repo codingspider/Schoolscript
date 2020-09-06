@@ -1,17 +1,13 @@
 from django.db import models
-from image_cropping import ImageRatioField
-
-class Photo(models.Model):
-    file = models.ImageField(blank=True, upload_to='uploads')
-    name = models.CharField(max_length=255, blank=True)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = 'photo'
-        verbose_name_plural = 'photos'
+from geoposition.fields import GeopositionField
+from django_google_maps import fields as map_fields
 
 
-class CrudUser(models.Model):
-    name = models.CharField(max_length=30, blank=True)
-    address = models.CharField(max_length=100, blank=True)
-    age = models.IntegerField(blank=True, null=True)
+class PointOfInterest(models.Model):
+    name = models.CharField(max_length=100)
+    position = GeopositionField()
+
+
+class Rental(models.Model):
+    address = map_fields.AddressField(max_length=200)
+    geolocation = map_fields.GeoLocationField(max_length=100)

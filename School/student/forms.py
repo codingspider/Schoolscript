@@ -14,6 +14,7 @@ class StudentForm(forms.ModelForm):
         super(StudentForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             self.fields['student_image'].widget.attrs['onchange'] = 'upload_img(this)'
+            visible.field.widget.attrs['class'] = 'form-control'
 
     class Meta:
         model = Student

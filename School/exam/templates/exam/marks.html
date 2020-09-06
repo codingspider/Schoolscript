@@ -1,0 +1,52 @@
+{% extends 'institute/base.html' %}
+{% block content %}
+{% if message %}
+    {{ message }}
+{% endif %}
+
+<div class="container">
+    <form action="/get_all_student" method="post" class="form-group">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-3">
+                <select class="form-control" id='e1' name="class" required>
+                    <option value=''>-- Select Class--</option>
+                    {% for value in classes %}
+                    <option value='{{ value.id}}'>{{ value.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id='e12' name="section" required>
+                    <option value=''>-- Select Section --</option>
+                    {% for data in sections %}
+                    <option value='{{ data.id}}'>{{ data.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id='e13' name="group" required>
+                    <option value=''>-- Select Group --</option>
+                    {% for data in groups %}
+                    <option value='{{ data.id}}'>{{ data.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id='e14' name="shift" required>
+                    <option value=''>-- Select Shift --</option>
+                    {% for data in shifts %}
+                    <option value='{{ data.id}}'>{{ data.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div class="col-md-12">
+                <br>
+                <button type="submit" class="btn btn-info pull-right">Find Student</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

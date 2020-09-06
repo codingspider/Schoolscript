@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 from .choicestatus import gender_status,blood_group,choice_status,religion_status, work_type
 from hostels.models import Designation
@@ -12,6 +14,7 @@ class Group(models.Model):
 
 
 class Professionals(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teacher')
     first_name = models.CharField(max_length=255, null=True, blank=True)
     last_name = models.CharField(max_length=255, null=True, blank=True)
     gender = models.CharField(max_length=5, choices=gender_status, null=True)

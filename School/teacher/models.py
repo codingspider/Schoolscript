@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 G_CHOICES =(
@@ -13,13 +14,15 @@ Access_CHOICES = (
 
 
 class Teacher(models.Model):
-    full_name = models.CharField(max_length=255, null=True, blank=True)
-    gender =models.CharField(max_length=2, choices=G_CHOICES)
+    # user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='teacher')
+    first_name = models.CharField(max_length=255, null=True, blank=True)
+    last_name = models.CharField(max_length=255, null=True, blank=True)
+    gender = models.CharField(max_length=2, choices=G_CHOICES)
     teacher_designation = models.CharField(max_length=255, null=True, blank=True)
     work_type = models.CharField(max_length=255, null=True, blank=True)
     monthly_salary = models.FloatField(null=True, blank=True)
     special_for = models.CharField(max_length=255, null=True, blank=True)
-    educational_qualification =models.CharField(max_length=255, null=True, blank=True)
+    educational_qualification = models.CharField(max_length=255, null=True, blank=True)
     special_training = models.CharField(max_length=255, null=True, blank=True)
     joining_date = models.DateField(null=True,blank=True)
     retirement_date = models.DateField(null=True, blank=True)
@@ -54,7 +57,7 @@ class Teacher(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='uploads/')
 
     def __str__(self):
-        return self.full_name
+        return self.first_name
 
 
 

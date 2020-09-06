@@ -1,0 +1,58 @@
+{% extends 'institute/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Sign up form </h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" method="post" action="">
+
+                        {% csrf_token %}
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend"><span class="input-group-text">
+                   </span></div>
+                            {{ form.username }}
+                        </div>
+                        <span class="text-error">{{ form.username.errors }}</span>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend"><span class="input-group-text">
+                  </span></div>
+                            {{ form.email }}
+                        </div>
+                        <span class="text-error">{{ form.email.errors }}</span>
+
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend"><span class="input-group-text">
+                   </span></div>
+                            {{ form.password1 }}
+                        </div>
+                        <span class="text-error">{{ form.password1.errors }}</span>
+
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend"><span class="input-group-text">
+                    </span></div>
+                            {{ form.password2 }}
+                        </div>
+                        <span class="text-error">{{ form.password2.errors }}</span>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="submit" name="register" class="btn btn-primary px-4">Register</button>
+                            </div>
+                            <div class="col-6 text-right">
+                                <a href={% url 'login' %} class="btn btn-link px-0">Login</a>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

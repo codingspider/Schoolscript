@@ -1,6 +1,7 @@
 from django.db import models
 
-# Create your models here.
+from subject.models import Shift, Section, Group, Class
+
 GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
@@ -12,10 +13,10 @@ class Student(models.Model):
     institute_name = models.CharField(max_length=255, null=True, )
     student_name = models.CharField(max_length=255, null=True, )
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, null=True)
-    student_class = models.CharField(max_length=20, null=True,)
-    shift = models.CharField(max_length=50, null=True)
-    section = models.CharField(max_length=50, null=True)
-    group= models.CharField(max_length=255, null=True)
+    student_class = models.ForeignKey(Class, on_delete=models.CASCADE, null=True)
+    shift = models.ForeignKey(Shift, on_delete=models.CASCADE,null=True)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, null=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
     id_number = models.IntegerField(blank=True, null=True)
     class_roll = models.IntegerField(blank=True, null=True)
     session = models.CharField(max_length=100, blank=True, null=True)

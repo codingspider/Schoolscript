@@ -47,14 +47,7 @@ class StudentEditView(UpdateView):
     model = Student
     template_name = 'student/update.html'
     context_object_name = 'institute'
-    fields = ('institute_name', 'student_name', 'gender', 'student_class', 'shift', 'section',
-              'group', 'id_number', 'class_roll', 'session', 'dob', 'blood_group', 'religion',
-              'birth_id_number', 'phone_number', 'email', 'old_school_address', 'cause_for_leave',
-              'house_no', 'house_name', 'road_no', 'village', 'post', 'union', 'upozilla', 'district',
-              'postal_code', 'permanent_village', 'permanent_post', 'permanent_union', 'permanent_upozilla',
-              'permanent_district', 'permanent_postal_code', 'student_image'
-
-              )
+    form_class = StudentForm
 
     def get_success_url(self):
         return reverse_lazy('students')
@@ -71,10 +64,10 @@ class StudentUpdateView(View):
             student.institute_name = request.POST.get('institute_name')
             student.student_name = request.POST.get('student_name', )
             student.gender = request.POST.get('gender', )
-            student.student_class = request.POST.get('student_class', )
-            student.shift = request.POST.get('shift', )
-            student.section = request.POST.get('section', )
-            student.group = request.POST.get('group', )
+            student.student_class_id = request.POST.get('student_class',)
+            student.shift_id = request.POST.get('shift', )
+            student.section_id = request.POST.get('section', )
+            student.group_id = request.POST.get('group', )
             student.id_number = request.POST.get('id_number', )
             student.class_roll = request.POST.get('class_roll', )
             student.session = request.POST.get('session', )

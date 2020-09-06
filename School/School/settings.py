@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '2mso9ntut+y(8@k&cw@p2ru3t0i4opigd1t%loyhlhs48g+okq'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -58,10 +56,19 @@ INSTALLED_APPS = [
     'transports',
     'gallary',
     'staff',
-    'subject'
-    
+    'subject',
+    'exam',
+    'mapbox_location_field',
+    'geoposition',
+    'django_google_maps',
+    'attendence.apps.AttendenceConfig'
+
 ]
 DATETIME_FORMAT = '%Y-%m-%d %I:%M %p'
+GEOPOSITION_GOOGLE_MAPS_API_KEY = 'AIzaSyCPJpjD-qcR_yIxJnS8maR5W9KB0E3EzYI'
+MAPBOX_KEY = "pk.eyJ1IjoibWlnaHR5c2hhcmt5IiwiYSI6ImNqd2duaW4wMzBhcWI0M3F1MTRvbHB0dWcifQ.1sDAD43q0ktK1Sr374xGfw"
+GEOIP_PATH = os.path.dirname(__file__)
+GOOGLE_MAPS_API_KEY = 'AIzaSyCPJpjD-qcR_yIxJnS8maR5W9KB0E3EzYI'
 BOOTSTRAP4 = {
     'include_jquery': True,
 }
@@ -69,6 +76,7 @@ BOOTSTRAP4 = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'geoip2_extras.middleware.GeoIP2Middleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -96,17 +104,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'School.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'school',
-    'USER': 'postgres',
-    'PASSWORD': '123456',
-    'HOST': 'localhost',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'student',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
     }
 }
 
@@ -136,7 +143,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -150,8 +156,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+

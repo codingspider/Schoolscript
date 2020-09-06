@@ -1,91 +1,91 @@
 {%  extends 'institute/base.html' %}
 
 {% block content %}
-		<br>
-		<div class="row">
-			<div class="col-md-8 offset-md-2">
-				<div class="card card-body">
-					<h5>Subject</h5>
-				</div>
-				<div class="alert alert-danger print-error-msg" style="display:none">
-					<ul></ul>
-				</div>
-				<p class="form_msg text-center"></p>
-				<div class="card card-body">
-					<form id="subject-form" method="POST" novalidate>
-						{% csrf_token %}
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.name.label }}</label>
-							{{form.name}}
-							<span class="text-danger">{{form.errors.name}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.teacher.label }}</label>
-							{{form.teacher}}
-							<span class="text-danger">{{form.errors.teacher}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.subject_class.label }}</label>
-							{{form.subject_class}}
-							<span class="text-danger">{{form.errors.subject_class}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.type.label }}</label>
-							{{form.type}}
-							<span class="text-danger">{{form.errors.type}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.subject_code.label }}</label>
-							{{form.subject_code}}
-							<span class="text-danger">{{form.errors.subject_code}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.author.label }}</label>
-							{{form.author}}
-							<span class="text-danger">{{form.errors.author}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.pass_mark.label }}</label>
-							{{form.pass_mark}}
-							<span class="text-danger">{{form.errors.pass_mark}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.total_mark.label }}</label>
-							{{form.total_mark}}
-							<span class="text-danger">{{form.errors.total_mark}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.viva_mark.label }}</label>
-							{{form.viva_mark}}
-							<span class="text-danger">{{form.errors.viva_mark}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.written_mark.label }}</label>
-							{{form.written_mark}}
-							<span class="text-danger">{{form.errors.written_mark}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.msq_mark.label }}</label>
-							{{form.msq_mark}}
-							<span class="text-danger">{{form.errors.msq_mark}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.practical_mark.label }}</label>
-							{{form.practical_mark}}
-							<span class="text-danger">{{form.errors.practical_mark}}</span>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputEmail1">{{ form.credit.label }}</label>
-							{{form.credit}}
-							<span class="text-danger">{{form.errors.credit}}</span>
-						</div>
+<br>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card card-body">
+            <h5>Subject</h5>
+        </div>
+        <div class="alert alert-danger print-error-msg" style="display:none">
+            <ul></ul>
+        </div>
+        <p class="form_msg text-center"></p>
+        <div class="card card-body">
+            <form id="subject-form" method="POST" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.name.label }}</label>
+                    {{form.name}}
+                    <span class="text-danger">{{form.errors.name}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.teacher.label }}</label>
+                    {{form.teacher}}
+                    <span class="text-danger">{{form.errors.teacher}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.subject_class.label }}</label>
+                    {{form.subject_class}}
+                    <span class="text-danger">{{form.errors.subject_class}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.type.label }}</label>
+                    {{form.type}}
+                    <span class="text-danger">{{form.errors.type}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.subject_code.label }}</label>
+                    {{form.subject_code}}
+                    <span class="text-danger">{{form.errors.subject_code}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.author.label }}</label>
+                    {{form.author}}
+                    <span class="text-danger">{{form.errors.author}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.pass_mark.label }}</label>
+                    {{form.pass_mark}}
+                    <span class="text-danger">{{form.errors.pass_mark}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.total_mark.label }}</label>
+                    {{form.total_mark}}
+                    <span class="text-danger">{{form.errors.total_mark}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.viva_mark.label }}</label>
+                    {{form.viva_mark}}
+                    <span class="text-danger">{{form.errors.viva_mark}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.written_mark.label }}</label>
+                    {{form.written_mark}}
+                    <span class="text-danger">{{form.errors.written_mark}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.msq_mark.label }}</label>
+                    {{form.msq_mark}}
+                    <span class="text-danger">{{form.errors.msq_mark}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.practical_mark.label }}</label>
+                    {{form.practical_mark}}
+                    <span class="text-danger">{{form.errors.practical_mark}}</span>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">{{ form.credit.label }}</label>
+                    {{form.credit}}
+                    <span class="text-danger">{{form.errors.credit}}</span>
+                </div>
 
-						<button type="submit" class="btn btn-success">Submit</button>
-					</form>
-				</div>
-			</div>
-			
-		</div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
    $('#subject-form').submit(function(e){
@@ -134,6 +134,7 @@
             });
         }
     });
+
 
 </script>
 {% endblock content %}

@@ -25,6 +25,8 @@ urlpatterns = [
     url('', include('transports.urls')),
     url('', include('staff.urls')),
     url('', include('subject.urls')),
+    url('', include('exam.urls')),
+    url('', include('attendence.urls')),
 
 
 ]
