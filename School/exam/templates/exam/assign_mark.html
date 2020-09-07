@@ -134,8 +134,7 @@
             data: formData,
             success: function (data) {
                 if($.isEmptyObject(data.error)){
-<!--                    printSuccess('Success');-->
-                        alert('ok')
+                    printSuccess('Success');
                     }else{
                         console.log(data.error)
                         printErrorMsg(data.error);

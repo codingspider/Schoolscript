@@ -31,6 +31,7 @@ class Result(models.Model):
     subject_type = models.CharField(max_length=100, blank=True, )
     exam_type = models.CharField(max_length=100, blank=True, )
     student_roll = models.CharField(max_length=100, blank=True, )
+    cr_mark = models.CharField(max_length=100, blank=True, )
     pass_mark = models.CharField(max_length=100, blank=True, )
     written_mark = models.CharField(max_length=100, blank=True, null=True)
     mcq_mark = models.CharField(max_length=100, blank=True, )
@@ -38,6 +39,18 @@ class Result(models.Model):
     viva_mark = models.CharField(max_length=100, blank=True, )
     created_at = models.DateField(default=now)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, editable=False, null=True, blank=True)
+
+
+class Grade(models.Model):
+    grade_name = models.CharField(max_length=255, null=True, blank=True)
+    grade_point = models.FloatField(blank=True, null=True)
+    mark_from = models.IntegerField(null=True, blank=True)
+    mark_to = models.IntegerField(null=True, blank=True)
+    note = models.TextField()
+
+    def __str__(self):
+        return self.grade_name
+
 
 
 

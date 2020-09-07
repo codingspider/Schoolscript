@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from .forms import ExamForm, ResultForm
+from .forms import ExamForm, ResultForm, GradeForm
 from .models import *
 from subject.models import Class, Section, Group, Shift, Subject, SubjectType
 from student.models import Student
@@ -166,6 +166,7 @@ class AddExamMarkView(View):
             result.subject_type = subject_type[i]
             result.subject_id = subject_id[i]
             result.pass_mark = pass_mark[i]
+            result.cr_mark = cr_mark[i]
             result.written_mark = written_mark[i]
             result.mcq_mark = mcq_mark[i]
             result.practical_mark = pr_mark[i]
@@ -181,3 +182,72 @@ class AddExamMarkView(View):
 class ResultDeleteView(View):
     def get(self, request):
         Result.objects.all().delete()
+
+
+class GradListView(ListView):
+    model = Grade
+    context_object_name = 'types'
+    form_class = GradeForm
+    initial = {'key': 'value'}
+    template_name = 'grade/index.html'
+
+    def get(self, request):
+        grades = Grade.objects.all().order_by('-id')
+        form = self.form_class(initial=self.initial)
+        context = {'grades': grades, 'form': form}
+        return render(request, self.template_name, context)
+
+
+class AddGradView(CreateView):
+    model = Grade
+    form_class = GradeForm
+    template_name = 'grade/create.html'
+    success_url = reverse_lazy('grade-list')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+
+
+class EditGradeView(UpdateView):
+    model = Grade
+    template_name = 'grade/update.html'
+    context_object_name = 'grade'
+    form_class = GradeForm
+    success_url = reverse_lazy('grade-list')
+
+
+class UpdateGradeView(View):
+    form_class = GradeForm
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            rooms = Grade.objects.get(pk=request.POST.get('grade_id'))
+            rooms.grade_name = request.POST.get('grade_name')
+            rooms.grade_point = request.POST.get('grade_point', )
+            rooms.mark_from = request.POST.get('mark_from', )
+            rooms.mark_to = request.POST.get('mark_to', )
+            rooms.note = request.POST.get('note', )
+            rooms.save()
+            return JsonResponse({"instance": 'messages'}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, json_dumps_params={'indent': 2})
+
+
+class GradeDeleteView(DeleteView):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Grade.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+
