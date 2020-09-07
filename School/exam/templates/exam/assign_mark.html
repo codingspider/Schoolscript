@@ -1,14 +1,30 @@
 {% extends 'institute/base.html' %}
 {% block content %}
 {% if message %}
-    {{ message }}
+{{ message }}
 {% endif %}
 
 <div class="container">
     <form action="/get_all_student" method="post" class="form-group">
         {% csrf_token %}
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
+                <select class="form-control" id='e1' name="class" required>
+                    <option value=''>-- Select Exam--</option>
+                    {% for ex in exams %}
+                    <option value='{{ ex.id}}'>{{ ex.exam_type}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" id='e1' name="subject_id" required>
+                    <option value=''>-- Select Sub--</option>
+                    {% for sub in subjects %}
+                    <option value='{{ sub.id}}'>{{ sub.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
                 <select class="form-control" id='e1' name="class" required>
                     <option value=''>-- Select Class--</option>
                     {% for value in classes %}
@@ -16,7 +32,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <select class="form-control" id='e12' name="section" required>
                     <option value=''>-- Select Section --</option>
                     {% for data in sections %}
@@ -24,7 +40,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <select class="form-control" id='e13' name="group" required>
                     <option value=''>-- Select Group --</option>
                     {% for data in groups %}
@@ -32,7 +48,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <select class="form-control" id='e14' name="shift" required>
                     <option value=''>-- Select Shift --</option>
                     {% for data in shifts %}
@@ -49,131 +65,113 @@
     </form>
 </div>
 <div class="container">
-    <form action="/add_marks_to_student" method="post" class="form-group">
+    <p class="form_msg"></p>
+    <form id="mark-form" method="post">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-md-3">
-                <label for="">Exam Type </label>
-                <select class="form-control" id='exam' name="exam_type">
-                    <option value=''>-- Select Exam--</option>
-                    {% for value in exam %}
-                    <option value='{{ value.id}}'>{{ value.exam_type}}</option>
+    <table class="table table-bordered">
+        <thead>
+        <th>Name</th>
+        <th>Roll</th>
+        <th>Pass Mark</th>
+        <th>Cr Mark</th>
+        <th>Written</th>
+        <th>MCQ</th>
+        <th>Pr mark</th>
+        <th>Viva mark</th>
+        <th> Type</th>
+        </thead>
+        <tbody>
+        {% for value in students %}
+        <tr>
+            <td style="display:none;">
+                <input value="{{ exam_id}}" class="form-control" type="text" name="exam_id[]">
+                <input value="{{ class_id}}" class="form-control" type="text" name="class_id[]">
+                <input value="{{subject_id}}" class="form-control"  type="text" name="subject_id[]">
+                <input value="{{value.class_roll}}" class="form-control"  type="text" name="class_roll[]">
+                <input value="{{value.id}}" class="form-control"  type="text" name="student_id[]">
+            </td>
+            <td>
+                {{ value.student_name }}
+            </td>
+            <td>
+                {{ value.class_roll }}
+            </td>
+            <td><input value="" class="form-control" placeholder="--" type="text" name="pass_mark[]"></td>
+            <td><input value="" class="form-control" placeholder="--" type="text" name="cr_mark[]"></td>
+            <td> <input value="" placeholder="--" class="form-control" type="text" name="written_mark[]"></td>
+            <td> <input value="" class="form-control" placeholder="--" type="text" name="mcq_mark[]"></td>
+            <td><input value="" class="form-control" type="text" placeholder="--" name="practical_mark[]"></td>
+            <td><input value="" class="form-control" placeholder="--" type="text" name="viva_mark[]"></td>
+            <td>
+            <select class="form-control" name="sub_type[]" id="">
+                    {% for value in sub_type %}
+                    <option value="{{ value.id }}">{{ value.name }}</option>
                     {% endfor %}
                 </select>
-            </div>
-            <div class="col-md-3">
-                <label for=""> Student Name </label>
-                <select class="form-control" id='select' name="student_roll">
-                    <option value=''>-- Select Student --</option>
-                    {% for data in students %}
-                    <option value='{{ data.class_roll}}'>{{ data.student_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="">Student Roll </label>
-                <input type="text" class="form-control" name="student_roll" id="show_selected" value="">
-            </div>
-            <br></br>
-            {% for value in  subjects%}
-            <div class="container-fluid">
-                <div class="row" id="row0">
-                <div class="col-sm-2">
-                    <div class="form-group ">
-                        <label class="" for="subject_name">{{ value.name}}<span class="star">*</span></label>
-                        <div class="">
-                            <input type="hidden" value="{{ value.id }}" name="subject_id[]" class="form-control"
-                                   readonly="readonly">
+            </td>
+        </tr>
+        {% endfor %}
 
-                            <input type="text" value="{{ value.name }}" name="subject_name[]" class="form-control"
-                                   readonly="readonly">
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" class="form-control" name="student_roll[]" id="roll" value="">
-                <input type="hidden" class="form-control" name="exam_id[]" id="exam_id" value="">
-                <input type="hidden" class="form-control" name="class_id[]"  value="{{class_id}}">
-                <div class="col-sm-2">
-                    <div class="form-group ">
-                        <label class="" for="cr_mark">Pass Mark ({{value.pass_mark}}) </label>
-                        <div class="">
-                            <input value="" class="form-control" placeholder="--" type="text" name="pass_mark[]">
-                        </div>
-                    </div>
-                </div>
-                    <div class="col-sm-2">
-                    <div class="form-group ">
-                        <label class="" for="cr_mark">Written ({{value.written_mark}}) </label>
-                        <div class="">
-                            <input value="" placeholder="--" class="form-control" type="text" name="written_mark[]">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <div class="form-group ">
-                        <label class="" for="mcq_mark">MCQ ({{value.msq_mark}})</label>
-                        <div class="">
-                            <input value="" class="form-control" placeholder="--" type="text" name="mcq_mark[]">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <div class="form-group ">
-                        <label class="" for="pr_mark">Practical ({{value.practical_mark}})</label>
-                        <div class="">
-                            <input value="" class="form-control" type="text" placeholder="--" name="practical_mark[]">
-                        </div>
-                    </div>
-                </div>
-                    <div class="col-sm-2">
-                    <div class="form-group ">
-                        <label class="" for="pr_mark">Viva ({{value.viva_mark}})</label>
-                        <div class="">
-                            <input value="" class="form-control" placeholder="--" type="text" name="viva_mark[]">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-2">
-                    <div class="form-group ">
-                        <label class="" for="subject_status">Type <span class="star">*</span></label>
-                        <div class="">
-                            <select class="form-control" name="sub_type[]" id="">
-                                {% for value in sub_type %}
-                                <option value="{{ value.id }}">{{ value.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            {% endfor %}
-            <div class="col-md-12">
-                <br>
-                <button type="submit" class="btn btn-info pull-right">Add Mark</button>
-            </div>
-        </div>
+        </tbody>
+    </table>
+        <button type="submit" class="btn btn-info pull-right">Submit</button>
     </form>
 </div>
-
-<br><br>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
     $(document).ready(function () {
     $('body').on('change','#select', function() {
          $('#show_selected').val(this.value);
-         $('#roll').val(this.value);
     });
 });
+ $('#mark-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/add_marks_to_student",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if($.isEmptyObject(data.error)){
+<!--                    printSuccess('Success');-->
+                        alert('ok')
+                    }else{
+                        console.log(data.error)
+                        printErrorMsg(data.error);
+                    }
+             },
+             complete:function(){
+               $('body, html').animate({scrollTop:$('body').offset().top}, 'fast');
+            },
 
-</script>
-<script>
-    $(document).ready(function () {
-    $('body').on('change','#exam', function() {
-         $('#exam_id').val(this.value);
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+
+        function printSuccess(msg) {
+            $(".form_msg").html('');
+            $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
+            $(".form_msg").append('<p>'+msg+'</p>');
+            window.setTimeout(function() {
+                    window.location.href = '/exam_marks';
+                },500);
+
+        }
+           function printErrorMsg (msg) {
+             $(".form_msg").html('');
+             $(".form_msg").removeClass('dn');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                 $(".form_msg").append('<p class="alert-danger">'+key+' - '+value+'</p>');
+                return false;
+              }
+            });
+        }
     });
-});
 
 </script>
+
 {% endblock %}

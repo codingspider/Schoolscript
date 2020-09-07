@@ -86,7 +86,10 @@
 <br>
 {% if students %}
 <div class="container">
-    <h2>Attendence Table</h2>
+    <h2>Attendance Table</h2>
+    <p class="form_msg"></p>
+<form id="attendance-form" method="post">
+    {% csrf_token %}
     <table class="table">
         <thead>
         <tr>
@@ -106,67 +109,82 @@
             <td data-title="Name">{{ data.student_name}}</td>
             <td data-title="Roll">{{ data.class_roll}}</td>
             <td data-title="Email">{{ data.email}}</td>
-            <td class="studentID" data-studentid="{{ data.id }}" data-title="Attendance">
+            <td>
+            <input type="hidden" name="class_id[]" value="{{class_id}}">
+            <input type="hidden" name="subject_id[]" value="{{subject_id}}">
+            <input type="hidden" name="section_id[]" value="{{section_id}}">
+            <input type="hidden" name="date[]" value="{{date}}">
+            <input type="hidden" name="student_id[]" value="{{data.id}}">
+            <input type="hidden" name="class_roll[]" value="{{data.class_roll}}">
                 <label class="radio-inline">
-                    <input type="radio" name="optradio" id="" value="P"  checked>Present
+                    <input class="q" type="checkbox" name="attendance[]" value="P">Present
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="optradio" id="" value="LE"> Late Present With Excuse
+                    <input class="q" type="checkbox" name="attendance[]" value="LE"> Late Present With Excuse
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="optradio" id="" value="L">Late Present
+                    <input class="q" type="checkbox" name="attendance[]"  value="L">Late Present
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="optradio" id="" value="A">Absent
+                    <input class="q" type="checkbox" name="attendance[]" value="A">Absent
                 </label>
-
             </td>
         </tr>
         {% endfor %}
-
         </tbody>
     </table>
-            <span style="margin-top: 20px;" class="btn btn-success pull-right save_attendance">Submit</span>
-
+        <button type="submit" class="btn btn-success pull-right save_attendance">Submit</button>
+</form>
 </div>
 {% endif %}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-$('.save_attendance').click(function(){
-     var attendance = {};
-      $('.attendance').each(function(i){
-          var name = $(this).attr('name');
-          if($("input:radio[name="+name+"]").is(":checked")) {
-              var val = $('input:radio[name='+name+']:checked').val();
-          } else {
-              var val = '';
-          }
-          attendance[name] = val;
-      });
-
-      var day = "{{ date }}";
-      var classes = "{{ class_id }}";
-      var section = "{{ section_id }}";
-      var group = "{{group_id}}";
-      var subjectID = "{{subject_id}}";
-
-      if(parseInt(classes) && parseInt(day)) {
-          $.ajax({
-              type: 'POST',
-              url: "/attendance_save_attendance/",
-              data: {"day" : day, "classes" : classes, "section" : section, "subject" : subjectID , "group" : group , "attendance" : attendance },
-              dataType: "html",
-              success: function (data) {
+ $('#attendance-form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/attendance_save_attendance/",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
                 if($.isEmptyObject(data.error)){
-                    alert('ok')
+                    printSuccess('Success');
                     }else{
                         console.log(data.error)
-                        alert('failed')
+                        printErrorMsg(data.error);
                     }
-             }
-          });
-      }
-  });
+             },
+             complete:function(){
+               $('body, html').animate({scrollTop:$('body').offset().top}, 'fast');
+            },
+
+            cache: false,
+            contentType: false,
+            processData: false
+
+        });
+
+        function printSuccess(msg) {
+            $(".form_msg").html('');
+            $(".form_msg").removeClass('dn alert-danger').addClass('alert-success');
+            $(".form_msg").append('<p>'+msg+'</p>');
+            window.setTimeout(function() {
+                    window.location.href = '/attendances';
+                },500);
+
+        }
+           function printErrorMsg (msg) {
+             $(".form_msg").html('');
+             $(".form_msg").removeClass('dn');
+            $.each( msg, function( key, value ) {
+                if (value) {
+                 $(".form_msg").append('<p class="alert-danger">'+key+' - '+value+'</p>');
+                return false;
+              }
+            });
+        }
+    });
 
 
 </script>

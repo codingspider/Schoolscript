@@ -104,18 +104,36 @@ class StudentListView(View):
 
 
 class AttendanceSaveView(View):
-    model = Attendance
 
-    def attendance(self, request):
-        data = request.POST
-        date = data.get('day', '')
-        classes = data.get('classes', '')
-        section = data.get('section', '')
+    def post(self, request):
+        class_id = request.POST.getlist('class_id[]')
+        subject_id = request.POST.getlist('subject_id[]')
+        section_id = request.POST.getlist('section_id[]')
+        date = request.POST.getlist('date[]')
+        class_roll = request.POST.getlist('class_roll[]')
+        student_id = request.POST.getlist('student_id[]')
+        attendance = request.POST.getlist('attendance[]')
+        #
+        student_len = len(student_id)
+        print(student_len)
+        i = 0
+        while i < student_len:
+            result = Attendance()
+            result.class_id = class_id[i]
+            result.subject = subject_id[i]
+            result.section = section_id[i]
+            result.date = date[i]
+            result.student = student_id[i]
+            result.roll = class_roll[i]
+            result.attendance = attendance[i]
+            result.created_by = request.user
+            instance = result.save()
+            print(i)
+            i += 1
 
-        person = Attendance.objects.create(
-        date=date, class_id=classes, section=section,
+        # ser_instance = serializers.serialize('json', [instance, ])
+        return JsonResponse({"instance": 'ser_instance'}, status=200)
 
-        )
-        person.save()
+
 
 

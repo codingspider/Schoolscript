@@ -5,7 +5,7 @@ from . import views
 
 
 urlpatterns = [
-    path('attendences', views.AttendenceListView, name='attendence_list'),
+    path('attendances', views.AttendenceListView, name='attendance_list'),
     path('get_student_list_for_attendance/', views.StudentListView.as_view(), name='list_for_attendance'),
     path('attendance_save_attendance/', views.AttendanceSaveView.as_view(), name='save_attendance'),
 

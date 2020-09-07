@@ -84,14 +84,18 @@ class ExamDeleteView(DeleteView):
 class ExamMarksListView(View):
     def get(self, request):
         classes = Class.objects.all()
+        exam = Exam.objects.all()
         sections = Section.objects.all()
         groups = Group.objects.all()
         shifts = Shift.objects.all()
+        subjects = Subject.objects.all()
         context = {
             'classes': classes,
             'sections': sections,
             'groups': groups,
-            'shifts': shifts
+            'shifts': shifts,
+            'exams': exam,
+            'subjects': subjects
         }
 
         return render(request, 'exam/marks.html', context)
@@ -104,6 +108,8 @@ class ExamGetStudentView(View):
             shift_id = request.POST.get('shift')
             section_id = request.POST.get('section')
             group_id = request.POST.get('group')
+            exam_id = request.POST.get('exam')
+            subject_id = request.POST.get('subject_id')
 
             subjects = Subject.objects.filter(teacher_id=1)
             students = Student.objects.filter(student_class_id=class_id, shift_id=shift_id, section_id=section_id,
@@ -112,8 +118,8 @@ class ExamGetStudentView(View):
             sections = Section.objects.all()
             groups = Group.objects.all()
             shifts = Shift.objects.all()
-            exam = Exam.objects.all()
             sub_type = SubjectType.objects.all()
+            exams = Exam.objects.all()
 
             context = {
                 'subjects': subjects,
@@ -122,9 +128,11 @@ class ExamGetStudentView(View):
                 'sections': sections,
                 'groups': groups,
                 'shifts': shifts,
-                'exam': exam,
+                'exam_id': exam_id,
+                'exams': exams,
                 'sub_type': sub_type,
-                'class_id': request.POST.get('class'),
+                'class_id': class_id,
+                'subject_id': request.POST.get('subject_id'),
             }
             return render(request, 'exam/assign_mark.html', context)
         else:
@@ -136,21 +144,21 @@ class AddExamMarkView(View):
 
     def post(self, request, *args, **kwargs):
         class_id = request.POST.getlist('class_id[]')
-        student_roll = request.POST.getlist('student_roll[]')
+        student_roll = request.POST.getlist('class_roll[]')
         subject_type = request.POST.getlist('sub_type[]')
         exam_type = request.POST.getlist('exam_id[]')
         subject_name = request.POST.getlist('subject_name[]')
         subject_id = request.POST.getlist('subject_id[]')
         pass_mark = request.POST.getlist('pass_mark[]')
+        cr_mark = request.POST.getlist('cr_mark[]')
         written_mark = request.POST.getlist('written_mark[]')
         mcq_mark = request.POST.getlist('mcq_mark[]')
-        practical_mark = request.POST.getlist('practical_mark[]')
+        pr_mark = request.POST.getlist('practical_mark[]')
         viva_mark = request.POST.getlist('viva_mark[]')
-
-        sub_len = len(subject_name)
+        #
+        sub_len = len(student_roll)
         i = 0
         while i < sub_len:
-            # print(written_mark[i])
             result = Result()
             result.class_id = class_id[i]
             result.student_roll = student_roll[i]
@@ -160,14 +168,14 @@ class AddExamMarkView(View):
             result.pass_mark = pass_mark[i]
             result.written_mark = written_mark[i]
             result.mcq_mark = mcq_mark[i]
-            result.practical_mark = practical_mark[i]
+            result.practical_mark = pr_mark[i]
             result.viva_mark = viva_mark[i]
-            result.save()
+            result.created_by = request.user
+            instance = result.save()
             i += 1
-        context = {
-            'message': 'Data has been saved Successfully.'
-        }
-        return render(request, 'exam/marks.html', context)
+
+            # ser_instance = serializers.serialize('json', [instance, ])
+        return JsonResponse({"instance": 'ser_instance'}, status=200)
 
 
 class ResultDeleteView(View):
