@@ -61,7 +61,9 @@ INSTALLED_APPS = [
     'mapbox_location_field',
     'geoposition',
     'django_google_maps',
-    'attendence.apps.AttendenceConfig'
+    'attendence.apps.AttendenceConfig',
+    'routine',
+    'syllabus'
 
 ]
 DATETIME_FORMAT = '%Y-%m-%d %I:%M %p'
