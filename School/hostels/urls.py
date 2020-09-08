@@ -51,5 +51,5 @@ urlpatterns = [
     path('edit_designation/<int:pk>', designation.DesignationUpdateView.as_view(), name="edit_designation"),
     path('update_designation/', designation.DesignationUpdate.as_view(), name="update-designation"),
     path('delete_designation/', designation.DesignationDeleteView.as_view(), name="delete-designation"),
-
+    path('example', room.query, name="example")
 ]

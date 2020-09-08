@@ -29,7 +29,7 @@ class SyllabusAddView(CreateView):
     success_url = reverse_lazy('syllabus')
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             instance = form.save()
             ser_instance = serializers.serialize('json', [instance, ])
@@ -50,7 +50,7 @@ class SyllabusUpdateView(View):
     form_class = SyllabusForm
 
     def post(self, request):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
 
         if form.is_valid():
             syllabus = Syllabus.objects.get(pk=request.POST.get('syllabus_id'))
@@ -59,7 +59,7 @@ class SyllabusUpdateView(View):
             syllabus.classes_id = request.POST.get('classes', )
             syllabus.subject_id = request.POST.get('subject', )
             syllabus.note = request.POST.get('note', )
-            syllabus.file = request.POST.get('file', )
+            syllabus.file = request.FILES.get('file', )
             syllabus.save()
             return JsonResponse({"instance": 'messages'}, status=200)
         else:

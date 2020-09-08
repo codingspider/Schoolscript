@@ -1,0 +1,25 @@
+{% extends 'institute/base.html' %}
+{% block content %}
+<table class="table table-bordered">
+    <thead>
+            <th>name</th>
+            <th>email</th>
+            <th>company</th>
+            <th>reg</th>
+            <th>job</th>
+            <th>Ex</th>
+    </thead>
+    <tbody>
+{% for value in data %}
+    <tr>
+        <td>{{ value.reg.name}}</td>
+        <td>{{ value.reg.email }}</td>
+        <td>{{ value.reg.company }}</td>
+        <td>{{ value.reg.name }}</td>
+        <td> {{ value.job }}</td>
+        <td> {{ value.experience }}</td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock content %}

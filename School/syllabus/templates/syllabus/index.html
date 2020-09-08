@@ -11,6 +11,7 @@
       <th>Section</th>
       <th>Class</th>
       <th>Subject</th>
+      <th>Syllabus</th>
       <th>Action</th>
     </tr>
   </thead>
@@ -21,6 +22,11 @@
       <td>{{ data.section }}</td>
       <td>{{ data.classes }}</td>
       <td>{{ data.subject }}</td>
+      {% if data.file %}
+      <td><a href="{{ data.file.url }}" class="">Download</a></td>
+      {% else %}
+      <td>No FIle Attached</td>
+      {% endif %}
       <td>
         <a href="/edit_syllabus/{{data.id}}" class="btn btn-info">Edit</a>
 		<button class="btn btn-danger" onClick="SyllabusDelete({{data.id}})">DELETE</button>

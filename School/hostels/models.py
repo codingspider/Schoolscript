@@ -55,7 +55,7 @@ class Hostel(models.Model):
 #-----------------------hostel room staff --------------------
 
 class HostelRoomStudent(models.Model):
-    user=models.ForeignKey(User,null=True, on_delete=models.SET_NULL, unique=True)
+    user=models.OneToOneField(User,null=True, on_delete=models.SET_NULL, unique=True)
     hostel=models.ForeignKey(Hostel,null=True, on_delete=models.SET_NULL, blank=True)
     room=models.ForeignKey(Room,null=True, on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
@@ -89,5 +89,22 @@ class HostelRoomAssign(models.Model):
 
 
 
+class registration(models.Model):
+   name = models.CharField(max_length=30)
+   email = models.EmailField()
+   password = models.CharField(max_length=30)
+   company = models.CharField(max_length=30)
+
+   def __str__(self):
+       return self.name
+
+
+class personal_details(models.Model):
+   reg = models.ForeignKey(registration, on_delete=models.CASCADE)
+   job = models.CharField(max_length=30)
+   experience = models.IntegerField(default=0)
+
+   def __str__(self):
+       return self.job
 
 

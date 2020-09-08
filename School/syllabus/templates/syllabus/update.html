@@ -12,7 +12,7 @@
 				</div>
 				<p class="form_msg text-center"></p>
 				<div class="card card-body">
-					<form id="syllabus-form" method="POST" novalidate>
+					<form id="syllabus-form" enctype="multipart/form-data" method="POST" novalidate>
 						{% csrf_token %}
                         <input type="hidden" name="syllabus_id" value="{{object.id}}">
 						<div class="form-group">

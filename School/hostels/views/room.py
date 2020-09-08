@@ -7,7 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
-from ..models import Room, RoomType
+from ..models import Room, RoomType, personal_details, registration
 from ..form import RoomForm
 
 
@@ -77,5 +77,19 @@ class RoomDeleteView(DeleteView):
             'deleted': True
         }
         return JsonResponse(data)
+
+
+def query(request):
+    reg = personal_details.objects.filter(experience=2, reg=1, reg__name__startswith='Rokon').all().order_by('-id')
+    context = {
+        'data': reg
+    }
+    return render(request, 'institute/query.html', context)
+
+    # for value in data:
+    #
+    #     print(value)
+
+
 
 
